@@ -1,0 +1,206 @@
+﻿
+    <Controls:MetroWindow
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:Extended="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+	x:Class="RGB_Window.MainWindow"
+	x:Name="AuroraWindow"
+	Title="Aurora"
+	WindowStartupLocation="CenterScreen"   ResizeMode="CanMinimize" GlowBrush="#CC119EDA" Closed="AuroraWindow_Closed_1" Loaded="AuroraWindow_Loaded_1" StateChanged="AuroraWindow_StateChanged" >
+            
+       
+       
+   
+    <Controls:MetroWindow.Resources>
+        <Style TargetType="Button" x:Key="ShapeButton">
+            <Setter Property="Width" Value="80"></Setter>
+            <Setter Property="Height" Value="80"></Setter>
+            <Setter Property="Background" Value="#CC119EDA"></Setter>
+            <Setter Property="Margin" Value="10"></Setter>
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DrawingLabels_MouseDown"></EventSetter>
+        </Style>
+       
+        <Style TargetType="Button" x:Key="MetroCircleButtonStyle" BasedOn="{StaticResource MetroCircleButtonStyle}">
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Menu_Mouse_Down"/>
+            <Setter Property="Focusable" Value="False"></Setter>
+            <Setter Property="Width" Value="50"></Setter>
+            <Setter Property="Height" Value="50"></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#CC119EDA"></Setter>
+                    <Setter Property="Foreground" Value="#CC119EDA"></Setter>
+                   
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox" x:Key="ComboBoxStyle">
+
+        </Style>
+        <Style TargetType="Label" x:Key="Menu">
+            <EventSetter Event="MouseLeftButtonDown" Handler="Menu_Mouse_Down"></EventSetter>
+        </Style>
+       
+        <Style TargetType="Button" x:Key="LoadLabel">
+            <Setter Property="Focusable" Value="False"></Setter>
+            <Setter Property="Opacity" Value="0.8"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="Margin" Value="5 0 5 0"></Setter>
+            <Setter Property="Foreground" Value="#4479D4"></Setter>
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DrawingLabels_MouseDown"></EventSetter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="1"></Setter>
+            </Trigger>
+            </Style.Triggers>
+        </Style>
+  
+</Controls:MetroWindow.Resources>
+    <DockPanel Name="LayoutRoot"  MouseUp="Draw_enableMonitor" >
+       
+       
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Name="Menu" DockPanel.Dock="Top">
+            
+            <Button Width="60" Height="60" Name="Connect"  Style="{DynamicResource MetroCircleButtonStyle}"  RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="90.493"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <Button.Background>
+                        <ImageBrush ImageSource=".\Images\Connect.ico"></ImageBrush>
+                    </Button.Background>
+                </Button>
+            <Button   Name="Bluetooth"  Width="60" Height="60"  Style="{DynamicResource MetroCircleButtonStyle}" >
+                <Button.ToolTip>
+                    <TextBlock>Bluetooth</TextBlock>
+                </Button.ToolTip>
+                <Button.Background>
+                    <ImageBrush ImageSource=".\Images\bluetooth.ico"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button  Name="Draw"  Style="{DynamicResource MetroCircleButtonStyle}" >
+                <Button.ToolTip>
+                    <TextBlock>Draw</TextBlock>
+                </Button.ToolTip>
+                <Button.Background>
+                    <ImageBrush ImageSource=".\Images\draw.ico"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button  Name="Effects" Style="{DynamicResource MetroCircleButtonStyle}" Content="Effect">
+                <Button.ToolTip>
+                    <TextBlock>Effect</TextBlock>
+                </Button.ToolTip>
+            </Button>
+            <Button  Name="Images" Style="{DynamicResource MetroCircleButtonStyle}" >
+                <Button.ToolTip>
+                    <TextBlock>Image</TextBlock>
+                </Button.ToolTip>
+                <Button.Background>
+                    <ImageBrush ImageSource=".\Images\image.ico"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button  Name="Video" Style="{DynamicResource MetroCircleButtonStyle}" >
+                <Button.ToolTip>
+                    <TextBlock>Video</TextBlock>
+                </Button.ToolTip>
+                <Button.Background>
+                    <ImageBrush ImageSource=".\Images\video.ico"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button  Name="Tetris" Style="{DynamicResource MetroCircleButtonStyle}" >
+                <Button.Background>
+                    <ImageBrush  ImageSource=".\Images\tetris.png"></ImageBrush>
+                </Button.Background>
+            </Button>
+            <Button  Name="Webcam" Style="{DynamicResource MetroCircleButtonStyle}">
+                <Button.ToolTip>
+                    <TextBlock>Webcam</TextBlock>
+                </Button.ToolTip>
+                <Button.Background>
+                    <ImageBrush ImageSource=".\Images\webcam.ico"></ImageBrush>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Name="Tetrisbar" Height="auto" HorizontalAlignment="Center" Visibility="Collapsed">
+            <Label>Points</Label>
+            <Label Name="Points" Content="{Binding}"></Label>
+            <Label>Time</Label>
+            <Label Name="Time"></Label>
+            <Label>Level</Label>
+            <Label Name="Level"></Label>
+        </StackPanel>
+        <StackPanel Name="DrawingBar" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Bottom"   DockPanel.Dock="Top" Visibility="Hidden" Orientation="Horizontal" >
+            <TabControl SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="Draw">
+                </TabItem>
+                <TabItem Name="HeaderShape" Header="Shape">
+                    <StackPanel Margin="100">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="Rectangle" Style="{StaticResource ShapeButton}" >
+                                <Border VerticalAlignment="Center" HorizontalAlignment="Center"  Width="50" Height="50" BorderBrush="Black"  BorderThickness="2"/>
+                            </Button>
+                            <Button Style="{StaticResource ShapeButton}"  Name="Line" >
+                                <Line VerticalAlignment="Center" HorizontalAlignment="Center" X1="0" X2="50" Y1="0" Y2="50" Stroke="Black" StrokeThickness="2"></Line>
+                            </Button>
+                            <Button   Name="Point" Style="{StaticResource ShapeButton}">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="25" Height="25" Background="Black" CornerRadius="25"></Border>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Button   Name="Ellipse"  Style="{StaticResource ShapeButton}">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="50" BorderBrush="Black" BorderThickness="2" CornerRadius="35"></Border>
+                            </Button>
+                            <Button Name="FilledRectangle" Style="{StaticResource ShapeButton}">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="50" Background="Black"></Border>
+                            </Button>
+                            <Button  Name="FilledEllipse" Style="{StaticResource ShapeButton}">
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="50" Background="Black" CornerRadius="35"></Border>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+                    <TabItem Name="HeaderColor" Header="Color" >
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Extended:ColorCanvas  Margin="100" Background="Transparent" BorderThickness="1" BorderBrush="#CC119EDA"  Name="DrawingColorPicker">
+                        </Extended:ColorCanvas>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Name="VideoBar" HorizontalAlignment="Center" DockPanel.Dock="Top" Visibility="Collapsed">
+            <TextBox Name="VideoPath" Width="400" IsReadOnly="True" Opacity="0.4"></TextBox>
+            <Button Name="LoadVideo" Style="{StaticResource LoadLabel}">Load</Button>
+            <Button Name="PlayVideo" Style="{StaticResource LoadLabel}">Play</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Name="ImageBar" HorizontalAlignment="Center" DockPanel.Dock="Top" Visibility="Collapsed">
+            <TextBox Name="ImagePath" Width="400" IsReadOnly="True" Opacity="0.4"></TextBox>
+            <Button Name="LoadImage" Style="{StaticResource LoadLabel}">Load</Button>
+        </StackPanel>
+        <StackPanel Name="StatusBar" Orientation="Horizontal" Width="auto"  DockPanel.Dock="Bottom" Background="#CC119EDA" Height="25" Margin="0">
+            <Label Name="Status" Width="auto" FontSize="12" VerticalAlignment="Center" Background="Transparent" Foreground="White"></Label>
+        </StackPanel>
+        <StackPanel  Name="EffectSelection" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center" Width="auto" Height="auto" Margin="5">
+            <Label  FontSize="15" Foreground="#4479D4"  VerticalAlignment="Center">Select Effect</Label>
+            <ComboBox Style="{DynamicResource ComboBoxStyle}" FontSize="15" Height="25"  Foreground="#4479D4" Width="140" Name="LeftMonitorSelect"  DropDownClosed="EffectSelectionDropDownClosed">         
+                <ComboBoxItem>ExpandingObjects</ComboBoxItem>
+                <ComboBoxItem >MovingBalls</ComboBoxItem>
+                <ComboBoxItem>ScrollingText</ComboBoxItem>
+                <ComboBoxItem>Plasma</ComboBoxItem>
+               
+                <ComboBoxItem>GradientColor</ComboBoxItem>
+                <ComboBoxItem>None</ComboBoxItem>
+            </ComboBox>
+            <Button Margin="10" HorizontalAlignment="Stretch" Click="Configure_Mouse_Down">Configure</Button>
+        </StackPanel>
+        <StackPanel Background="Black"  VerticalAlignment="Center" Name="CentralMonitor" Margin="0" HorizontalAlignment="Center"  MouseUp="BlitWithLayer"  MouseDown="Draw_SetOrgin" MouseMove="DrawOnMonitor">
+                <Image  Name="img3"></Image>
+        </StackPanel>
+        
+     
+    </DockPanel>
+</Controls:MetroWindow>

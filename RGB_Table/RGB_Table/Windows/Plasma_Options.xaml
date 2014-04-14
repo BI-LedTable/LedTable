@@ -1,0 +1,31 @@
+﻿<Controls:MetroWindow x:Class="RGB_Window.Windows.Plasma_Options"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Plasma_Window" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="ComboBox" x:Key="Combobox_StandardStyle"></Style>
+    </Window.Resources>
+        <DockPanel>
+         
+            <StackPanel Margin="10">
+                <Label Opacity="1"  FontSize="15" HorizontalAlignment="Center" Content="Gradient Mode"/>
+                <!--<ComboBox Style="{StaticResource Combobox_StandardStyle}"  Name="Selected_Objects" HorizontalAlignment="Left" Width="150">
+                    <ComboBoxItem>Radial</ComboBoxItem>
+                    <ComboBoxItem>Horizontal</ComboBoxItem>
+                    <ComboBoxItem>Vertical</ComboBoxItem>
+                    <ComboBoxItem>Diagonal</ComboBoxItem>
+                    <ComboBoxItem>Square</ComboBoxItem>
+                </ComboBox>-->
+                <ComboBox HorizontalAlignment="Center" Style="{StaticResource Combobox_StandardStyle}" Name="Palettes">
+                    <ComboBoxItem>RedGreenBlue</ComboBoxItem>
+                    <ComboBoxItem>BlackWhite</ComboBoxItem>
+                    <ComboBoxItem>RedGreen</ComboBoxItem>
+                    <ComboBoxItem>BlueGreen</ComboBoxItem>
+                    <ComboBoxItem>RedBlue</ComboBoxItem>
+
+                </ComboBox>
+            </StackPanel>
+        </DockPanel>
+   
+</Controls:MetroWindow>

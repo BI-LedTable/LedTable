@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGB_Window", "RGB_Table\RGB_Window.csproj", "{458D6B12-0213-4A2D-A8FF-739AB140FD7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGB_Libary", "DLL\EffectLibary\RGB_Libary.csproj", "{F5C8681C-3FBB-4352-8EA7-56DDD1433450}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{458D6B12-0213-4A2D-A8FF-739AB140FD7F}.Release|x86.ActiveCfg = Release|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F5C8681C-3FBB-4352-8EA7-56DDD1433450}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
