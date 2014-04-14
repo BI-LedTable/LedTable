@@ -34,11 +34,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Video">
+      <HintPath>..\AForge.Video.dll</HintPath>
+    </Reference>
     <Reference Include="AForge.Video.DirectShow">
-      <HintPath>..\..\..\Libs\Release\AForge.Video.DirectShow.dll</HintPath>
+      <HintPath>..\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
     <Reference Include="InTheHand.Net.Personal">
-      <HintPath>H:\InTheHand.Net.Personal.dll</HintPath>
+      <HintPath>..\InTheHand.Net.Personal.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -53,7 +56,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WriteableBitmapEx.Wpf">
-      <HintPath>..\..\..\Desktop\Diplomarbeit\WPF\Stuff\WPF\WriteableBitmapEx.Wpf.dll</HintPath>
+      <HintPath>..\WriteableBitmapEx.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\DLL\Xceed.Wpf.Toolkit.dll</HintPath>
