@@ -78,29 +78,28 @@ namespace RGB_Libary
                     //                {0, 1, 0},
                     //                {1, 2, 1}
                     //            };
-                  
 
+                    wbsource = wbsource.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
 
-                    //int scalex = (int)( wbsource.DpiX * wbsource.Width / (wbtarget.Width * wbtarget.DpiX));
-                    //int scaley = (int)( wbsource.DpiY * wbsource.Height / (wbtarget.Height * wbtarget.DpiY ));
-                    int scalex = (int)(wbsource.PixelWidth / (wbtarget.PixelWidth));
-                    int scaley = (int)(wbsource.PixelHeight / (wbtarget.PixelHeight));
+                    //int scalex = (int)(wbsource.PixelWidth / (wbtarget.PixelWidth));
+                    //int scaley = (int)(wbsource.PixelHeight / (wbtarget.PixelHeight));
 
-                    if (scalex <= 0)// für bilder die kleiner als 68x42 sind (werden dann öfter angezeigt)
-                    {
-                        scalex = 1;
-                    }
+                    //if (scalex <= 0)// für bilder die kleiner als 68x42 sind (werden dann öfter angezeigt)
+                    //{
+                    //    scalex = 1;
+                    //}
 
-                    if (scaley <= 0)
-                    {
-                        scaley = 1;
-                    }
+                    //if (scaley <= 0)
+                    //{
+                    //    scaley = 1;
+                    //}
 
                     for (int i = 0; i < 42; i++)
                     {
                         for (int j = 0; j < 68; j++)
                         {
-                            c[count] = wbsource.GetPixel((int)(j * scalex), (int)(i * scaley));
+                            // c[count] = wbsource.GetPixel((int)(j * scalex), (int)(i * scaley));
+                            c[count] = wbsource.GetPixel((int)(j), (int)(i));
                             wbtarget.SetPixel(j, i, c[count]);
                             count++;
                         }
