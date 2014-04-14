@@ -645,7 +645,7 @@ namespace RGB_Libary
                 Thread.Sleep(wait);
             }
 
-            //End Detective (Verbindung wurde unterbrochen
+            //End Detective (Verbindung wurde unterbrochen)
             if (conn_dev_enabled == false)
             {
                 Thread.CurrentThread.Abort();
