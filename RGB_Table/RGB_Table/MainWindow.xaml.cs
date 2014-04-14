@@ -320,6 +320,7 @@ namespace RGB_Window
                 }
 
         }
+
         private void Window_Bar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -454,8 +455,7 @@ namespace RGB_Window
                     if (webcam != null)
                         webcam.closeWebcam();
                     runningTask = RunningTask.Video;
-                    wbm = BitmapFactory.New(68, 42);
-                    img3.Source = wbm;
+
                     CentralMonitor.IsEnabled = false;
                     draw = false;
 
