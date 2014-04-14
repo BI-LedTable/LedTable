@@ -78,7 +78,7 @@
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="StickyWindow">
-      <HintPath>..\..\..\..\stickywindow\StickyWindowWinWpfLibrary\StickyWindowLibrary\bin\Debug\StickyWindow.dll</HintPath>
+      <HintPath>..\DLL\StickyWindow.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
