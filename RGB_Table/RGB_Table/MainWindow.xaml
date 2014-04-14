@@ -186,7 +186,7 @@
         </StackPanel>
         <StackPanel  Name="EffectSelection" DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center" Width="auto" Height="auto" Margin="5">
             <Label  FontSize="15" Foreground="#4479D4"  VerticalAlignment="Center">Select Effect</Label>
-            <ComboBox Style="{DynamicResource ComboBoxStyle}" FontSize="15" Height="25"  Foreground="#4479D4" Width="140" Name="LeftMonitorSelect"  DropDownClosed="EffectSelectionDropDownClosed">         
+            <ComboBox Style="{DynamicResource ComboBoxStyle}" FontSize="15" Height="25"  Foreground="#4479D4" Width="140" Name="LeftMonitorSelect" Text="Plasma"  DropDownClosed="EffectSelectionDropDownClosed">         
                 <ComboBoxItem>ExpandingObjects</ComboBoxItem>
                 <ComboBoxItem >MovingBalls</ComboBoxItem>
                 <ComboBoxItem>ScrollingText</ComboBoxItem>

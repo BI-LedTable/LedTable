@@ -35,7 +35,7 @@ namespace RGB_Libary
         public Plasma(WriteableBitmap wbm) 
         {
             plasma = new int[wbm.PixelWidth, wbm.PixelHeight];
-            colors = HSV.BlackWhite();
+            colors = HSV.RedGreenBlue();
             counter = 1;
             this.wbm = wbm;
 
