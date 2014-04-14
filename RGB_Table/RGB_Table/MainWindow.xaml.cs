@@ -108,7 +108,7 @@ namespace RGB_Window
         {
             //Die Bildschirmabhängige Anzeige der Software
             Point screenSize = new Point(System.Windows.SystemParameters.FullPrimaryScreenWidth, System.Windows.SystemParameters.FullPrimaryScreenHeight);
-            AuroraWindow.Width = screenSize.X * 0.5;
+            AuroraWindow.Width = screenSize.X * 0.4;
             AuroraWindow.Height = screenSize.Y * 0.9;
 
 
@@ -118,7 +118,7 @@ namespace RGB_Window
             bright = 255;
 
 
-            img3.Width = AuroraWindow.Width * 0.8;
+            img3.Width = AuroraWindow.Width * 0.85;
             img3.Height = img3.Width / 1.618;
 
             //Das SerialportWindow initialisiern 
