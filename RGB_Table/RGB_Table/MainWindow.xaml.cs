@@ -529,7 +529,7 @@ namespace RGB_Window
                     break;
 
                 case RunningTask.Effect:
-                    DrawingBar.Visibility = Visibility.Hidden;
+                    DrawingBar.Visibility = Visibility.Collapsed;
                     ImageBar.Visibility = Visibility.Collapsed;
                     CentralMonitor.IsEnabled = false;
                     VideoBar.Visibility = Visibility.Collapsed;
@@ -541,7 +541,7 @@ namespace RGB_Window
                 case RunningTask.Image:
                     ImageBar.Visibility = Visibility.Visible;
                     VideoBar.Visibility = Visibility.Collapsed;
-                    DrawingBar.Visibility = Visibility.Hidden;
+                    DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
                     img3.Source = wbm;
@@ -552,7 +552,7 @@ namespace RGB_Window
                 case RunningTask.Video:
                     ImageBar.Visibility = Visibility.Collapsed;
                     VideoBar.Visibility = Visibility.Visible;
-                    DrawingBar.Visibility = Visibility.Hidden;
+                    DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
                     img3.Source = wbm;
@@ -583,7 +583,7 @@ namespace RGB_Window
                 case RunningTask.Webcam:
                     ImageBar.Visibility = Visibility.Collapsed;
                     VideoBar.Visibility = Visibility.Collapsed;
-                    DrawingBar.Visibility = Visibility.Hidden;
+                    DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
                     img3.Source = wbm;

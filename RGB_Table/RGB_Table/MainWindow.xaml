@@ -134,7 +134,7 @@
             <Label>Level</Label>
             <Label Name="Level"></Label>
         </StackPanel>
-        <StackPanel Name="DrawingBar" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Bottom"   DockPanel.Dock="Top" Visibility="Hidden" Orientation="Horizontal" >
+        <StackPanel Name="DrawingBar" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Bottom"   DockPanel.Dock="Top" Visibility="Collapsed" Orientation="Horizontal" >
             <TabControl SelectionChanged="TabControl_SelectionChanged">
                 <TabItem Header="Draw">
                 </TabItem>
