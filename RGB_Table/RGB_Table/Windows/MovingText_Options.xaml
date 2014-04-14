@@ -13,11 +13,11 @@
 
             <StackPanel Margin="10">
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center">Write Text</Label>
-                <TextBox AcceptsReturn="True" Name="Text" HorizontalAlignment="Center" MinWidth="50" MinHeight="25">
+                <TextBox AcceptsReturn="True" Name="Text" HorizontalAlignment="Center" MinWidth="50" MinHeight="25" Width="242">
 
                 </TextBox>
             <Label Opacity="1" FontSize="15"  HorizontalAlignment="Center">Set Color</Label>
-            <ColorPicker:ColorPicker HorizontalAlignment="Center" Name="ColorPicker"/>
+            <ColorPicker:ColorPicker HorizontalAlignment="Center" Name="ColorPicker" Width="155"/>
 
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center" Content="Set FontSize"/>
             <Slider HorizontalAlignment="Center" Width="150" Name="FontSize" Maximum="30" Minimum="1" Value="1" ></Slider>
@@ -29,7 +29,7 @@
             <Slider HorizontalAlignment="Center" Width="150" Name="PosX" Maximum="42" Minimum="0" Value="1" ></Slider>
 
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center" Content="Set Mode"/>
-            <ComboBox   Name="Selected_Objects" HorizontalAlignment="Center" Width="150">
+            <ComboBox   Name="Selected_Objects" HorizontalAlignment="Center" Text="ScrollX" Width="150">
                     <ComboBoxItem>ScrollX</ComboBoxItem>
                     <ComboBoxItem>ScrollY</ComboBoxItem>
                 </ComboBox>
