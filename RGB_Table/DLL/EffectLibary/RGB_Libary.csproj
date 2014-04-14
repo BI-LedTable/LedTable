@@ -34,9 +34,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge.Video">
-      <HintPath>..\..\..\Libs\Release\AForge.Video.dll</HintPath>
-    </Reference>
     <Reference Include="AForge.Video.DirectShow">
       <HintPath>..\..\..\Libs\Release\AForge.Video.DirectShow.dll</HintPath>
     </Reference>
