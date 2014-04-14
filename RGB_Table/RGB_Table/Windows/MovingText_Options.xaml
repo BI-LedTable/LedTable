@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ColorPicker="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="MovintText_Options" Height="500" Width="300" 
-                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" ResizeMode="NoResize" GlowBrush="#CC119EDA">
+                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" ResizeMode="NoResize" GlowBrush="#CC119EDA" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         
     </Window.Resources>
