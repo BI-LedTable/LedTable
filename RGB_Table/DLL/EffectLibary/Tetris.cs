@@ -24,16 +24,12 @@ namespace RGB_Libary
     {
         WriteableBitmap background;
         WriteableBitmap wb;
-        WriteableBitmap wb2;
+        WriteableBitmap wbm;
   
         private int Rows;
         private int Cols;
         int _level;
 
-
-        
-
-        
         private int LinesFilled;
         private Tetramino currTetramino;
         BitmapImage img;
@@ -54,12 +50,12 @@ namespace RGB_Libary
 
 
 
-        public Tetris(WriteableBitmap wb2)
+        public Tetris(WriteableBitmap wbm)
         {
 
            
-            this.wb2 = wb2;
-            this.wb = BitmapFactory.New(wb2.PixelWidth/2,wb2.PixelHeight/2);
+            this.wbm = wbm;
+            this.wb = BitmapFactory.New(wbm.PixelWidth / 2, wbm.PixelHeight / 2);
             
          
           
@@ -321,10 +317,9 @@ namespace RGB_Libary
           
         }
         public void update() 
-        {
-            wb2.Clear();
-            
-            wb2.Blit(new Rect(0, 0, wb2.PixelWidth, wb2.PixelHeight), wb, new Rect(new Size(wb.PixelWidth, wb.PixelHeight)));
+        { 
+            wbm.Clear();
+            wbm.Blit(new Rect(0, 0, wbm.PixelWidth, wbm.PixelHeight), wb, new Rect(new Size(wb.PixelWidth, wb.PixelHeight)));
         }
         public void CurrTetraminoMoveFastDown()
         {
@@ -622,19 +617,18 @@ namespace RGB_Libary
         }
         
 
-        public TetrisExecute(WriteableBitmap wb,DispatcherTimer dt,Window CentralMonitor) 
+        public TetrisExecute(WriteableBitmap wbm,DispatcherTimer dt,Window CentralMonitor) 
         {
            
             this.dt = dt;
             CentralMonitor.KeyDown+=CentralMonitor_KeyDown;
-            this.t = new Tetris(wb);
+            this.t = new Tetris(wbm);
             cm = CentralMonitor;
             hwnds = HwndSource.FromVisual(cm) as HwndSource; 
             collison = new MediaPlayer();
             lineClear = new MediaPlayer();
             music = new MediaPlayer();
             music.Open(new System.Uri("Sounds/Tetris.mp3", UriKind.Relative));
-          
             music.Play();
 
             Bluetooth.Instance.CommandControlChange += new Bluetooth.PropertyChangeHandler(Event_Control_tetris);

@@ -373,8 +373,7 @@ namespace RGB_Window
                     if (t_e != null)
                     {
                         t_e.Stop_Tetris();
-                        wbm = BitmapFactory.New(68, 42);
-                        img3.Source = wbm;
+                      
                     }
                     if (v != null)
                         v.RunVideo = false;
@@ -402,15 +401,14 @@ namespace RGB_Window
                     if (t_e != null)
                     {
                         t_e.Stop_Tetris();
-                        wbm = BitmapFactory.New(68, 42);
-                        img3.Source = wbm;
-
+                      
                     }
                     if (v != null)
                         v.RunVideo = false;
                     if (webcam != null)
                         webcam.closeWebcam();
 
+                    
                     runningTask = RunningTask.Effect;
                     draw = false;
                     ex_eff = p.Plasma_execute;
@@ -494,8 +492,6 @@ namespace RGB_Window
                     }
                     break;
                 case "Webcam":
-                    wbm = BitmapFactory.New(68, 42);
-                    img3.Source = wbm;
                     runningTask = RunningTask.Webcam;
                     CentralMonitor.IsEnabled = false;
                     draw = false;
@@ -580,7 +576,7 @@ namespace RGB_Window
                     DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Visible;
-                    img3.Source = wbm;
+                   
                     wbm.Clear();
                     wh.Clear();
                     break;
