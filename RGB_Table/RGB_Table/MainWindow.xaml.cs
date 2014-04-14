@@ -544,6 +544,7 @@ namespace RGB_Window
                     DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
+                    CentralMonitor.IsEnabled = false;
                     img3.Source = wbm;
                     wbm.Clear();
                     wh.Clear();
