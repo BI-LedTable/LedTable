@@ -69,8 +69,8 @@ namespace RGB_Libary
                    int draw_pos_y = Convert.ToInt16(data.Split(' ')[1]);
                    byte draw_col_r = Convert.ToByte(data.Split(' ')[2]);
                    byte draw_col_g = Convert.ToByte(data.Split(' ')[3]);
-                   //byte draw_col_b = Convert.ToByte(data.Split(' ')[4]);
-                   byte draw_col_b = 100;
+                   byte draw_col_b = Convert.ToByte(data.Split(' ')[4]);
+                   //byte draw_col_b = 100;
                    Color draw_col = Color.FromRgb(draw_col_r, draw_col_g, draw_col_b);
 
                    setDrawtype = Drawtype.point;
