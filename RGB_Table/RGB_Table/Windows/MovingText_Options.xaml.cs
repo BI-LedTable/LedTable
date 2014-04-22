@@ -70,15 +70,12 @@ namespace Aurora.Windows
             this.movingText = movingText;
             this.SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
             this.Topmost = true;
-            
-            ColorPicker.UsingAlphaChannel = true;
-            ColorPicker.DisplayColorAndName = true;
-            ColorPicker.SelectedColor = Colors.White;
-            
-            Binding ColorBinding = new Binding("Color");
+
+
+            Binding ColorBinding = new Binding("ColorPalette");
             ColorBinding.Source = this.movingText;
             ColorBinding.Mode = BindingMode.TwoWay;
-            ColorPicker.SetBinding(Xceed.Wpf.Toolkit.ColorPicker.SelectedColorProperty, ColorBinding);
+            Palettes.SetBinding(ComboBox.TextProperty, ColorBinding);
 
             Binding TextBinding = new Binding("Text");
             TextBinding.Source = this.movingText;

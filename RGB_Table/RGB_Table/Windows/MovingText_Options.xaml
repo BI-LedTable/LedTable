@@ -6,7 +6,7 @@
         Title="MovingText" Height="500" Width="300" 
         ResizeMode="NoResize" GlowBrush="#CC119EDA" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-
+        <Style TargetType="ComboBox" x:Key="Combobox_StandardStyle"></Style>
     </Window.Resources>
 
 
@@ -17,8 +17,15 @@
             <TextBox AcceptsReturn="True" Name="Text" HorizontalAlignment="Center" MinWidth="50" MinHeight="25" Width="242">
 
             </TextBox>
-            <Label Opacity="1" FontSize="15"  HorizontalAlignment="Center">Set Color</Label>
-            <ColorPicker:ColorPicker HorizontalAlignment="Center" Name="ColorPicker" Width="155"/>
+            <Label Opacity="1" FontSize="15"  HorizontalAlignment="Center">Set Palette</Label>
+            <ComboBox MinWidth="85" Margin="10" HorizontalAlignment="Center" Style="{StaticResource Combobox_StandardStyle}" Name="Palettes">
+                <ComboBoxItem>RedGreenBlue</ComboBoxItem>
+                <ComboBoxItem>BlackWhite</ComboBoxItem>
+                <ComboBoxItem>RedGreen</ComboBoxItem>
+                <ComboBoxItem>BlueGreen</ComboBoxItem>
+                <ComboBoxItem>RedBlue</ComboBoxItem>
+
+            </ComboBox>
 
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center" Content="Set FontSize"/>
             <Slider HorizontalAlignment="Center" Width="150" Name="FontSize" Maximum="30" Minimum="1" Value="1" ></Slider>

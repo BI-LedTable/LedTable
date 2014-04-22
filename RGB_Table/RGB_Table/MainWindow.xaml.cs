@@ -789,8 +789,8 @@ namespace Aurora
                    
                     break;
                 case "ScrollingText":
+                    movingText.ColorPalette = Palettes.BlueGreen;
                     ex_eff = movingText.MovingText_execute;
-                  
                     SelectedWindow = movingTextOptionWindow;
                     movingTextOptionWindow.Show();
                     break;
@@ -888,10 +888,8 @@ namespace Aurora
         private void DrawOnMonitor(object sender, RoutedEventArgs e)
         {
             monitorImg.Source = drawlayer;
-
             drawlayer.Blit(new Rect(new Size(68, 42)), monitor, new Rect(new Size(68, 42)));
-
-           
+         
             if (draw != null && Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 Point mouse = new Point();
