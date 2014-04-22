@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGB_Window", "RGB_Table\RGB_Window.csproj", "{458D6B12-0213-4A2D-A8FF-739AB140FD7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora", "RGB_Table\Aurora.csproj", "{458D6B12-0213-4A2D-A8FF-739AB140FD7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RGB_Libary", "DLL\EffectLibary\RGB_Libary.csproj", "{F5C8681C-3FBB-4352-8EA7-56DDD1433450}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RgbLibrary", "DLL\EffectLibary\RgbLibrary.csproj", "{F5C8681C-3FBB-4352-8EA7-56DDD1433450}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

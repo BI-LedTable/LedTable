@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Xceed.Wpf.Toolkit;
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     //2D Matrix
     //68x42

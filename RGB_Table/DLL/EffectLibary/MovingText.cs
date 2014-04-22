@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows;
 using System.Globalization;
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public class MovingText
     {

@@ -14,7 +14,7 @@ using System.Drawing.Imaging;
 using System.Windows.Controls;
 
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public class Webcam
     {

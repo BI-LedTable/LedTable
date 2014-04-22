@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows;
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public class ExpandingObject 
     {
@@ -112,8 +112,6 @@ namespace RGB_Libary
     public class ExpandingObjects
     {
         private WriteableBitmap writeableBmp;
-        private DispatcherTimer dt;
-        private Dispatcher_Execute d_e;
         private ExpandingObject[] Ellipsen;
         private int amount;
         Random r;
@@ -179,7 +177,6 @@ namespace RGB_Libary
         {
             selected_obj = "ellipse";
             amount = 5;
-            execute_effect sin_effect = ExpandingObjects_execute;
           
             Ellipsen = new ExpandingObject[amount];
             r = new Random();

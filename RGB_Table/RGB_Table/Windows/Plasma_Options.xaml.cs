@@ -11,18 +11,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using RGB_Libary;
+using RgbLibrary;
 using MahApps.Metro.Controls;
 
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
     /// Interaktionslogik für Plasma_Window.xaml
     /// </summary>
-    public partial class Plasma_Options : MetroWindow
+    public partial class PlasmaOptionsWindow : MetroWindow
     {
         private Plasma p;
-        public Plasma_Options(Plasma p)
+        public PlasmaOptionsWindow(Plasma p)
         {
             InitializeComponent();
             this.SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
@@ -38,16 +38,19 @@ namespace RGB_Window.Windows
             ColorPaletteBinding.Mode = BindingMode.TwoWay;
             Palettes.SetBinding(ComboBox.TextProperty, ColorPaletteBinding);
         }
-
+        /// <summary>
+        /// The OnClosing events for the OptionWindow are override.
+        /// They should stay in background, in stead of to be close.
+        /// Otherwise a new instance of the object has to be created,
+        /// which means that the settings, the user has changed would have been lost
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }
-        public void Drag_Event(object sender, RoutedEventArgs e)
-        {
-            DragMove();
-        }
+   
     }
     
 }

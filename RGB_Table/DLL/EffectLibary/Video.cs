@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows;
-namespace RGB_Libary
+namespace RgbLibrary
 {
    
    public class Video

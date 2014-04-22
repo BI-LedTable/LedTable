@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <DefaultClrNameSpace>RGB_Table</DefaultClrNameSpace>
-    <RootNamespace>RGB_Window</RootNamespace>
+    <RootNamespace>Aurora</RootNamespace>
     <AssemblyName>RGB_Window</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <AlwaysCompileMarkupFilesInSeparateDomain>false</AlwaysCompileMarkupFilesInSeparateDomain>
@@ -50,6 +50,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\Debug\RGB_Window.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -131,8 +132,8 @@
     <Compile Include="Windows\GradientColor_Options.xaml.cs">
       <DependentUpon>GradientColor_Options.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\Mask.xaml.cs">
-      <DependentUpon>Mask.xaml</DependentUpon>
+    <Compile Include="Windows\Filter.xaml.cs">
+      <DependentUpon>Filter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\MovingText_Options.xaml.cs">
       <DependentUpon>MovingText_Options.xaml</DependentUpon>
@@ -164,7 +165,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\Mask.xaml">
+    <Page Include="Windows\Filter.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -263,9 +264,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DLL\EffectLibary\RGB_Libary.csproj">
+    <ProjectReference Include="..\DLL\EffectLibary\RgbLibrary.csproj">
       <Project>{f5c8681c-3fbb-4352-8ea7-56ddd1433450}</Project>
-      <Name>RGB_Libary</Name>
+      <Name>RgbLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

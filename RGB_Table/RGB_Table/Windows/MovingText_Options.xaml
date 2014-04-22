@@ -1,21 +1,22 @@
-﻿<Controls:MetroWindow x:Class="RGB_Window.Windows.MovingText_Options"
+﻿<Controls:MetroWindow x:Class="Aurora.Windows.MovingTextOptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:ColorPicker="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Title="MovintText_Options" Height="500" Width="300" 
-                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" ResizeMode="NoResize" GlowBrush="#CC119EDA" WindowStartupLocation="CenterOwner">
+        xmlns:ColorPicker="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
+        Title="MovingText" Height="500" Width="300" 
+        ResizeMode="NoResize" GlowBrush="#CC119EDA" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        
+
     </Window.Resources>
 
-   
-        <DockPanel>
 
-            <StackPanel Margin="10">
+    <DockPanel>
+
+        <StackPanel Margin="10">
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center">Write Text</Label>
-                <TextBox AcceptsReturn="True" Name="Text" HorizontalAlignment="Center" MinWidth="50" MinHeight="25" Width="242">
+            <TextBox AcceptsReturn="True" Name="Text" HorizontalAlignment="Center" MinWidth="50" MinHeight="25" Width="242">
 
-                </TextBox>
+            </TextBox>
             <Label Opacity="1" FontSize="15"  HorizontalAlignment="Center">Set Color</Label>
             <ColorPicker:ColorPicker HorizontalAlignment="Center" Name="ColorPicker" Width="155"/>
 
@@ -30,10 +31,10 @@
 
             <Label Opacity="1" FontSize="15" HorizontalAlignment="Center" Content="Set Mode"/>
             <ComboBox   Name="Selected_Objects" HorizontalAlignment="Center" Text="ScrollX" Width="150">
-                    <ComboBoxItem>ScrollX</ComboBoxItem>
-                    <ComboBoxItem>ScrollY</ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-        </DockPanel>
-    
+                <ComboBoxItem>ScrollX</ComboBoxItem>
+                <ComboBoxItem>ScrollY</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+    </DockPanel>
+
 </Controls:MetroWindow>

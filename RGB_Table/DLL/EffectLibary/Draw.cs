@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows;
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public enum Drawtype 
     {
@@ -39,8 +39,6 @@ namespace RGB_Libary
            mousepos = new Point();
            origin = new Point();
            c = new Color();
-
-
 
            bluetooth.CommandControlChange += new Bluetooth.PropertyChangeHandler(Event_Paint_Handler);
        }
@@ -83,13 +81,7 @@ namespace RGB_Libary
                    origin.X = 0;
                    origin.Y = 0;
 
-                //Zum testen
-               //Random rnd = new Random();
-               //byte r = Convert.ToByte(rnd.Next(0, 255));
-               //byte g = Convert.ToByte(rnd.Next(0, 255));
-               //byte b = Convert.ToByte(rnd.Next(0, 255));
-
-               //Color c = Color.FromRgb(r, g, b);
+             
 
                     Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)draw_pos_x, (int)draw_pos_y, draw_col)));
                }
@@ -121,11 +113,6 @@ namespace RGB_Libary
        }
        public void Draw_execute()
        {
-
-        img.Source = wh;
-        wh.Blit(new Rect(new Size(68, 42)), wbm, new Rect(new Size(68, 42)));
-
-           
        }
        public Drawtype setDrawtype
        {
@@ -161,7 +148,7 @@ namespace RGB_Libary
        }
        public void del()
        {
-           //if (origin.X < mousepos.X && origin.Y < mousepos.Y ||dt == Drawtype.line)
+         
                switch (dt) 
                {
               
