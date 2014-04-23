@@ -82,7 +82,7 @@ namespace RgbLibrary
 
 
 
-<<<<<<< HEAD
+
                    if ((draw_col_r < 256) && (draw_col_g < 256) && (draw_col_b < 256))
                    {
                        byte r = Convert.ToByte(draw_col_r);
@@ -92,9 +92,7 @@ namespace RgbLibrary
 
                        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)draw_pos_x, (int)draw_pos_y, draw_col)));
                    }
-=======
-             
->>>>>>> eb75e348290292ac74779ebadf2f4249ea696a23
+
 
                  
 
