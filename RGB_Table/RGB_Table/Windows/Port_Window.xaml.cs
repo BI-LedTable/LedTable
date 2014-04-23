@@ -14,37 +14,37 @@ using System.Windows.Shapes;
 using System.IO.Ports;
 using System.Threading;
 using System.Windows.Threading;
-using RGB_Libary;
+using RgbLibrary;
 using MahApps.Metro.Controls;
 
 
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// PortWindow is the userinterface window to connect with the LedTable.
+    /// The user selects the ComPort, where the data are send out and confirms his selection.
     /// </summary>
-    public partial class Port_Window : MetroWindow
+    public partial class PortWindow : MetroWindow
     {
-        #region variables
 
-        //Serial 
-        private SerialPort serial = new SerialPort();
+
+        private SerialPort serial;
         private string[] ports;
         private string Port;
         private bool connected = false;
-        #endregion
-        public Data_Out data;
+        public DataOut data;
 
-        public Port_Window()
+
+        public PortWindow()
         {
             InitializeComponent();
             init_Serial_Com();
-
         }
 
         private void init_Serial_Com()
         {
-            data = new Data_Out();
+            serial = new SerialPort();
+            data = new DataOut();
             ports = SerialPort.GetPortNames();
             Comm_Port_Names.DataContext = ports;
             tb_info.Text = ports.Length + " " + "Com Ports found";
@@ -56,20 +56,24 @@ namespace RGB_Window.Windows
             }
 
         }
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Control_Label_MouseDown(object sender, RoutedEventArgs e)
         {
             FrameworkElement feSource = e.Source as FrameworkElement;
             switch (feSource.Name)
             {
-              
+
                 case "Connect":
-                        data.set_PortName = Comm_Port_Names.SelectionBoxItem.ToString();
-                        Connect.IsEnabled = false;
+                    data.PortName = Comm_Port_Names.SelectionBoxItem.ToString();
+                    Connect.IsEnabled = false;
+                    data.Connected = true;
                     break;
                 case "Disconnect":
-                    data.Connected = true;
+                    data.Connected = false;
                     break;
             }
 
@@ -84,7 +88,7 @@ namespace RGB_Window.Windows
         private void MetroWindow_Closing_1(object sender, System.ComponentModel.CancelEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
-            
+
         }
     }
 

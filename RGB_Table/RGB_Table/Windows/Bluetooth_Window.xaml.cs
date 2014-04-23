@@ -11,17 +11,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using RGB_Libary;
+using RgbLibrary;
 using System.Threading;
 using MahApps.Metro.Controls;
 using System.Diagnostics;
 
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
     /// Interaktionslogik für Bluetooth_Window.xaml
     /// </summary>
-    public partial class Bluetooth_Window : MetroWindow
+    public partial class BluetoothWindow : MetroWindow
     {
         Bluetooth bluetooth = Bluetooth.Instance;
 
@@ -29,7 +29,7 @@ namespace RGB_Window.Windows
         List<String> found_devices;
         List<String> known_devices;
 
-        public Bluetooth_Window(MainWindow mw)
+        public BluetoothWindow(MainWindow mw)
         {
             InitializeComponent();
             bluetooth = Bluetooth.Instance;

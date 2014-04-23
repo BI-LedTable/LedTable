@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.IO;
 
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public delegate void ChangedEventhandler(object sender,BoolArgs a);
     public class BoolArgs : EventArgs 
@@ -24,40 +24,35 @@ namespace RGB_Libary
             this.status = status;
         }
     }
-    public class Data_Out 
+    /// <summary>
+    /// DataOut 
+    /// </summary>
+    public class DataOut 
     {
-        /// <summary>
-        /// Felder
-        /// </summary>
+       
         private string SerialPortName;
         public SerialPort serial;
         private Thread T_DataOut;
-       
+        private byte[] transferBytes;
+        byte[] rgb;
         private bool connected;
         
         public event ChangedEventhandler Changed;
-        private void OnChanged(BoolArgs e) 
-        {
-            if (Changed != null)
-                Changed(this, e);
-        }
+       
         public bool Connected
         {
             get { return connected; }
             set 
             {
-                
-                
                     connected = value;
                     OnChanged(new BoolArgs(value));
-                
             }
         }
-        
-        private byte[] transferBytes;
-        byte[] rgb;
-     
-        public string set_PortName
+        /// <summary>
+        /// If the PortName of the DataOut object
+        /// gets set the DataOut object gets intitialized
+        /// </summary>
+        public string PortName
         {
             set { 
                     SerialPortName = value;
@@ -65,13 +60,15 @@ namespace RGB_Libary
                         init_DataOut();
                 }
         }
-        public byte[] setTransferBytes
+        /// <summary>
+        /// The TransferBytes are sent over the serial ComPort
+        /// and are updatet periodically in <see cref="Aurora.MainWindow.monitorTimer_Tick"/>
+        /// </summary>
+        public byte[] TransferBytes
         {
             set
             {
-               
                     transferBytes = value;
-                   
             }
         }
         private void init_DataOut()
@@ -105,24 +102,18 @@ namespace RGB_Libary
                     {
                         if (!serial.IsOpen)
                         {
-                           
-                           
                             serial.Open();
                             serial.BaseStream.WriteTimeout = SerialPort.InfiniteTimeout;
                         }
                         else if (transferBytes != null)
                         {
-                            //AllowUpdate = false; 
-                            convert_argb_to_rgb();
+                            convertArgbToRgb();
                             serial.BaseStream.WriteByte(1);
                             Thread.Sleep(10);
                             serial.BaseStream.Write(rgb, 0, rgb.Length);
-                            //AllowUpdate = true;
-                            
                         }
                     }
                 }
-     
             }
             catch (Exception e)
             {
@@ -130,9 +121,13 @@ namespace RGB_Libary
                 MessageBox.Show(e.Message);
             }
         }
-        private void convert_argb_to_rgb() 
+        /// <summary>
+        /// The converting step is necessary,because the led stripes need rgb values
+        /// the writeablebitmap<see cref="Aurora.MainWindow.monitor"/> though has 
+        /// a alpha channel
+        /// </summary>
+        private void convertArgbToRgb() 
         {
-
             int c = 0;
             rgb = new byte[(11424 / 4) * 3];
             for (int i = 0; i < transferBytes.Length; i++)
@@ -145,16 +140,19 @@ namespace RGB_Libary
                         transferBytes[i + 1] = 0;
                     if (transferBytes[i + 2] == 1)
                         transferBytes[i + 2] = 0;
-
                     rgb[c] = transferBytes[i + 2];
                     rgb[c + 1] = transferBytes[i + 1];
                     rgb[c + 2] = transferBytes[i];
-
                     c += 3;
                 }
 
             }
          
+        }
+        private void OnChanged(BoolArgs e)
+        {
+            if (Changed != null)
+                Changed(this, e);
         }
        
        

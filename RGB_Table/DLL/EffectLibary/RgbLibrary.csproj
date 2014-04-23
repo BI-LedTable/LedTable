@@ -7,7 +7,7 @@
     <ProjectGuid>{F5C8681C-3FBB-4352-8EA7-56DDD1433450}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RGB_Libary</RootNamespace>
+    <RootNamespace>RgbLibrary</RootNamespace>
     <AssemblyName>EffectLibary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,17 +67,15 @@
     <Compile Include="Bluetooth.cs" />
     <Compile Include="ColorGradient.cs" />
     <Compile Include="DataOut.cs" />
-    <Compile Include="Dispatcher_Execute.cs" />
     <Compile Include="Draw.cs" />
     <Compile Include="ExpandingObjects.cs" />
     <Compile Include="HSV.cs" />
     <Compile Include="ImagePixelate.cs" />
-    <Compile Include="CollisionBalls.cs" />
+    <Compile Include="MovingBalls.cs" />
     <Compile Include="Plasma.cs" />
     <Compile Include="Tetris.cs" />
     <Compile Include="Video.cs" />
     <Compile Include="MovingText.cs" />
-    <Compile Include="Sin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Webcam.cs" />
   </ItemGroup>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,17 +15,20 @@ using System.Threading.Tasks;
 using System.Windows.Navigation;
 using System.Threading;
 using System.Windows.Threading;
-using RGB_Libary;
-using RGB_Window.Windows;
+using RgbLibrary;
+using Aurora.Windows;
 using MahApps.Metro.Controls;
 using Blue.Windows;
 
-
-
-
-namespace RGB_Window
+namespace Aurora
 {
-
+  
+    /// <summary>
+    /// Running Task is a <see cref="System.Enum"/> needed for the interface, to specify which user controls have to be hided or shown.
+    /// <remarks>
+    /// They are set in <see cref="MainWindow.Menu_Mouse_Down"/>, if the user changes to another menu item.
+    /// </remarks>
+    /// </summary>
     enum RunningTask
     {
         Draw,
@@ -35,78 +39,200 @@ namespace RGB_Window
         Webcam
     }
     /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
+    /// The delegate which is executet in <see cref="Aurora.MainWindow.monitorTimer_Tick"/>
+    /// </summary>
+    public delegate void execute_effect();
+    
+    /// <summary>
+    /// The MainWindow is the entry point of the application
+    /// 
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        Port_Window pw;
-        ExpandingObjects ex;
-        ExpandingObjects_Options e_o;
-        MovingText mt;
-        MovingText_Options mt_o;
-        Plasma p;
-        Plasma_Options p_o;
-        ColorGradient cg;
-        GradientColor_Options gc_o;
-        Mask_Options m_o;
-        WriteableBitmap wbm, wh;
-        DispatcherTimer dt_m;
+        /// <summary>
+        /// The monitor is the core element of the Aurora application.
+        /// It has a size of 68 x 42, which is exactly the size of the table.
+        /// To stay fast and at low processor utilization the WriteableBitmap is the best decision.
+        /// In combination  with the WriteableBitmapEx.Wpf Extension from the developer site http://writeablebitmapex.codeplex.com/
+        /// the useability of the Writeablebitmap gets extremly improved.
+        /// <para>The Extension includes a lot of features, the most important are
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// SetPixel method with various overloads
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// GetPixel method, to get the pixel color at a specified x,y coordinate
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Fast Clone methode to copy a WriteableBitmap
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>shapes, filled shapes</description>
+        /// </item>
+        /// <item>
+        /// <description>blitting functionalities, with different blend modes (filter for bitmaps)</description>
+        /// </item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        WriteableBitmap monitor;
+        /// <summary>
+        /// The drawlayer, as it name say, is needed, to not overdraw the painted picture.
+        /// Whatever you want to draw is saved in the layer and after it joined together with the <see cref="Aurora.MainWindow.monitor"/>
+        /// </summary>
+        WriteableBitmap drawlayer;
+        /// <summary>
+        /// The filterBitmap is an extra layer that is joined with the <see cref="Aurora.MainWindow.monitor"/>
+        /// to maipulate the color, whether it is alpha channel or color channel.
+        /// The WriteablebitmapEx.Wpf dll provides multiple functions,how the layers are combined.
+        /// <para>Multiply blend mode multiplies the numbers for each pixel of the top layer(<see cref="Aurora.MainWindow.filterBitmap"/>) with the corresponding pixel for the bottom layer(<see cref="Aurora.MainWindow.monitor"/>).</para>
+        /// </summary>
+        WriteableBitmap filterBitmap;
+        /// <summary>
+        /// The monitorTimer is the heartbeat of the application 
+        /// in it`s <see cref="Aurora.MainWindow.monitorTimer_Tick"/> event, the <see cref="Aurora.MainWindow.monitor"/> is updatet
+        /// and as result the data to send.
+        /// The DispatcherTimer is a special sort of timer, which is allowed to access to the ui or apply changes.
+        /// </summary>
+        DispatcherTimer monitorTimer;
+        /// <summary>
+        /// <seealso cref="Aurora.RunningTask"/>
+        /// </summary>
         RunningTask runningTask;
-        Dispatcher_Execute dis_exe;
-        execute_effect ex_eff;
-        object Configure_Window;
-        Rect r;
-        Byte[] bitmapbuffer;
-        TetrisExecute t_e;
-        Draw d;
-        Video v;
+        /// <summary>
+        /// <see cref="Aurora.Windows.MovingTextOptionsWindow"/>
+        /// </summary>
+        MovingTextOptionsWindow movingTextOptionWindow;
+        GradientColorOptionsWindow gradientOptionWindow;
+        FilterOptionWindow filterOptionWindow;
+        PlasmaOptionsWindow plasmaOptionWindow;
+        ExpandingObjectsOptionsWindow expandingObjectsWindow;
+        PortWindow portWindow;
+       
+        ExpandingObjects expandingObjects;
+        ColorGradient colorGradient;
+        MovingText movingText;
+        Plasma plasma;
+        CollisonBalls exp;
+
+        Draw draw;
+        Video video;
         Webcam webcam;
         ImagePixelate ip;
-        CollisonBalls exp;
-        bool draw;
+        TetrisExecute tetris;
+        
+      
+        execute_effect ex_eff;
+        Byte[] bitmapbuffer;
+        object SelectedWindow;
+        Rect r;
+        bool drawAccept;
         Point old;
         Point zw;
-        WriteableBitmap maskBitmap;
+       
+      
         private int redMask;
+        /// <summary>
+        /// Set an <seealso cref="System.Int32"/> value <seealso cref="Aurora.MainWindow.redMask"/>, 
+        /// to vary the red quantity of the <seealso cref="Aurora.MainWindow.monitor"/>
+        /// </summary>
         public int RedMask
         {
             get { return redMask; }
             set
             {
                 redMask = value;
-                maskBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
+                filterBitmap.Clear(Color.FromArgb((byte)bright, 
+                                    (byte)redMask, (byte)greenMask, (byte)blueMask));
             }
         }
         private int blueMask;
+        /// <summary>
+        /// Set an <seealso cref="System.Int32"/> value <seealso cref="Aurora.MainWindow.blueMask"/>, 
+        /// to vary the blue quantity of the <seealso cref="Aurora.MainWindow.monitor"/>
+        /// </summary>
         public int BlueMask
         {
             get { return blueMask; }
             set
             {
                 blueMask = value;
-                maskBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
+                filterBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
             }
         }
         private int greenMask;
+        /// <summary>
+        /// Set an <seealso cref="System.Int32"/> value <seealso cref="Aurora.MainWindow.greenMask"/>, 
+        /// to vary the geen quantity of the <seealso cref="Aurora.MainWindow.monitor"/>
+        /// </summary>
         public int GreenMask
         {
             get { return greenMask; }
             set
             {
                 greenMask = value;
-                maskBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
+                filterBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
             }
         }
-        int bright;
+        private int bright;
+        /// <summary>
+        /// Set an <seealso cref="System.Int32"/> value <seealso cref="Aurora.MainWindow.bright"/>, 
+        /// to vary the brightness  of the <seealso cref="Aurora.MainWindow.monitor"/>
+        /// </summary>
+        public int Brightness
+        {
+            get { return bright; }
+            set
+            {
+                bright = value;
+                filterBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
+            }
+        }
+        
+        /// <summary>
+        /// Constructor MainWindow initialises the components and calls the void function <seealso cref="Aurora.MainWindow.InitMainWindow"/>
+        /// </summary>
         public MainWindow()
         {
             this.InitializeComponent();
-            Init_MainWindow();
-
+            InitMainWindow();
         }
-        public void Init_MainWindow()
+
+        /// <summary>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>AuroraWindow size is suitet to the user display</description>
+        /// </item>
+        /// <item>
+        /// <description>The rgb mask and brigthness is set to 256 default</description>
+        /// </item>
+        /// <item>
+        /// <description>The monitorImg <see cref=""/> gets initialised in proportion to the AuroraWindow </description>
+        /// </item>
+        /// <item>
+        /// <description>The portWindow <seealso cref=""/> is initialised and the eventhandler data changed add, which is interrupted if the connection
+        /// is cancelated or startet</description>
+        /// </item>
+        /// <item>
+        /// <description>A very important point in InitMainWindow is to set the monitorImg.Source to monitor, otherwise nothing appears on the surface</description>
+        /// </item>
+        /// <item>
+        /// <description>The RenderOptions.SetEdgeMode(monitorImg, EdgeMode.Aliased) EdgeMode property squares the pixel and guarantes clear edges on the 68 x 42 resolution</description>
+        /// </item>
+        /// <item>
+        /// <description>The monitorTimer.Tick event has a frequence of 40 Hz</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        public void InitMainWindow()
         {
-            //Die Bildschirmabhängige Anzeige der Software
+       
             Point screenSize = new Point(System.Windows.SystemParameters.FullPrimaryScreenWidth, System.Windows.SystemParameters.FullPrimaryScreenHeight);
             AuroraWindow.Width = screenSize.X * 0.4;
             AuroraWindow.Height = screenSize.Y * 0.9;
@@ -118,70 +244,55 @@ namespace RGB_Window
             bright = 255;
 
 
-            img3.Width = AuroraWindow.Width * 0.85;
-            img3.Height = img3.Width / 1.618;
+            monitorImg.Width = AuroraWindow.Width * 0.85;
+            monitorImg.Height = monitorImg.Width / 1.618;
 
             //Das SerialportWindow initialisiern 
-            pw = new Port_Window();
-            pw.data.Changed += new ChangedEventhandler(StatusChanged);
+            portWindow = new PortWindow();
+            portWindow.data.Changed += new ChangedEventhandler(StatusChanged);
 
 
             //Das Rechteck für die Blit funktion festlegen
             r = new Rect(0, 0, 68, 42);
 
             //Writeable Bitmaps initialisiern
-            wbm = BitmapFactory.New(68, 42);
-            wh = BitmapFactory.New(68, 42);
+            monitor = BitmapFactory.New(68, 42);
+            drawlayer = BitmapFactory.New(68, 42);
 
 
-            img3.Source = wbm;
+            monitorImg.Source = monitor;
 
-            RenderOptions.SetBitmapScalingMode(img3, BitmapScalingMode.NearestNeighbor);
-            RenderOptions.SetEdgeMode(img3, EdgeMode.Aliased);
+            RenderOptions.SetBitmapScalingMode(monitorImg, BitmapScalingMode.NearestNeighbor);
+            RenderOptions.SetEdgeMode(monitorImg, EdgeMode.Aliased);
 
-            dt_m = new DispatcherTimer(DispatcherPriority.Render);
-            dt_m.Interval = new TimeSpan(0, 0, 0, 0, 25);
-            dt_m.Tick += Aurora_Cycle_Tick;
-            dt_m.Start();
+            monitorTimer = new DispatcherTimer(DispatcherPriority.Render);
+            monitorTimer.Interval = new TimeSpan(0, 0, 0, 0, 25);
+            monitorTimer.Tick += monitorTimer_Tick;
+            monitorTimer.Start();
 
-            bitmapbuffer = new Byte[wbm.ToByteArray().Length];
+            bitmapbuffer = new Byte[monitor.ToByteArray().Length];
 
             CentralMonitor.IsEnabled = false;
 
-
-
-
-
             runningTask = RunningTask.Effect;
-            dis_exe = new Dispatcher_Execute(dt_m);
-            maskBitmap = BitmapFactory.New(68, 42);
+            filterBitmap = BitmapFactory.New(68, 42);
 
             //Init Objects and Options Windows
-            ex = new ExpandingObjects(wbm);
-            e_o = new ExpandingObjects_Options(ex);
-            mt = new MovingText(wbm);
-            mt_o = new MovingText_Options(mt);
-            p = new Plasma(wbm);
-            p_o = new Plasma_Options(p);
-            cg = new ColorGradient(wbm);
-            gc_o = new GradientColor_Options(cg);
+            expandingObjects = new ExpandingObjects(monitor);
+            expandingObjectsWindow = new ExpandingObjectsOptionsWindow(expandingObjects);
+            movingText = new MovingText(monitor);
+            movingTextOptionWindow = new MovingTextOptionsWindow(movingText);
+            plasma = new Plasma(monitor);
+            plasmaOptionWindow = new PlasmaOptionsWindow(plasma);
+            colorGradient = new ColorGradient(monitor);
+            gradientOptionWindow = new GradientColorOptionsWindow(colorGradient);
             StickyWindow.RegisterExternalReferenceForm(this);
 
             //Bluetooth Event listening
-            RGB_Libary.Bluetooth.Instance.CommandControlChange += new Bluetooth.PropertyChangeHandler(Bluetooth_Command_Listener);
+            RgbLibrary.Bluetooth.Instance.CommandControlChange += new Bluetooth.PropertyChangeHandler(Bluetooth_Command_Listener);
 
         }
-        public int Brightness
-        {
-            get { return bright; }
-            set
-            {
-                bright = value;
-                maskBitmap.Clear(Color.FromArgb((byte)bright, (byte)redMask, (byte)greenMask, (byte)blueMask));
-            }
-        }
 
-        //Verwalten der Commands
         private void Bluetooth_Command_Listener(object sender, PropertyChangeArgs command)
         {
             try
@@ -196,40 +307,48 @@ namespace RGB_Window
                             Mode = 0;
                             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (ThreadStart)delegate
                             {
-                                if (t_e != null)
+                                if (tetris != null)
                                 {
-                                    t_e.Stop_Tetris();
-                                    wbm = BitmapFactory.New(68, 42);
-                                    img3.Source = wbm;
+                                    tetris.Stop_Tetris();
+                                    monitor = BitmapFactory.New(68, 42);
+                                    monitorImg.Source = monitor;
 
                                 }
 
                                 runningTask = RunningTask.Draw;
-                                draw = true;
-                                if (v != null)
-                                    v.RunVideo = false;
+                                drawAccept = true;
+                                if (video != null)
+                                    video.RunVideo = false;
                                 if (webcam != null)
                                     webcam.closeWebcam();
 
                                 try
                                 {
-                                    d = new Draw(wh, img3, wbm);
+                                    draw = new Draw(drawlayer, monitorImg, monitor);
                                 }
                                 catch (Exception exc)
                                 {
                                 }
-                                ex_eff = d.Draw_execute;
-                                dis_exe.Execute_Effect = ex_eff;
+                                ex_eff = draw.Draw_execute;
 
-                                d.setColor = Color.FromArgb(0, 200, 0, 255);
-                                d.setDrawtype = Drawtype.point;
+                                draw.setColor = Color.FromArgb(0, 200, 0, 255);
+                                draw.setDrawtype = Drawtype.point;
 
                                 Binding ColorBinding = new Binding("setColor");
-                                ColorBinding.Source = d;
+                                ColorBinding.Source = draw;
                                 ColorBinding.Mode = BindingMode.TwoWay;
                                 DrawingColorPicker.SetBinding(Xceed.Wpf.Toolkit.ColorCanvas.SelectedColorProperty, ColorBinding);
 
-                                TaskSettings();
+                                SetUserControls();
+             
+                                object GlassOfSugar = new  Object();
+                                Slider slider = new Slider();
+                                Binding AmountBinding = new Binding("Amount");
+                                AmountBinding.Source = GlassOfSugar;
+                                AmountBinding.Mode = BindingMode.TwoWay;
+                                slider.SetBinding(Slider.ValueProperty, AmountBinding);
+
+
                             });
 
 
@@ -250,41 +369,41 @@ namespace RGB_Window
                                     webcam.closeWebcam();
 
                                 runningTask = RunningTask.Tetris;
-                                draw = false;
+                                drawAccept = false;
                                 //Versuchsweise eingebaut -> dt_m.Tick ist fehlerquelle -.-  -> sollte eigentlich nicht sein
                                 //dt_m.IsEnabled = false;
 
-                                if (t_e == null)
+                                if (tetris == null)
                                 {
-                                    wbm = BitmapFactory.New(68, 42);
-                                    img3.Source = wbm;
-                                    t_e = new TetrisExecute(wbm, dt_m, AuroraWindow);
-                                    ex_eff = t_e.tetris_exe;
-                                    dis_exe.Execute_Effect = ex_eff;
+                                    monitor = BitmapFactory.New(68, 42);
+                                    monitorImg.Source = monitor;
+                                    tetris = new TetrisExecute(monitor, monitorTimer, AuroraWindow);
+                                    ex_eff = tetris.tetris_exe;
+                                
 
                                     Binding ScoreBinding = new Binding("Score");
                                     ScoreBinding.Mode = BindingMode.OneWay;
-                                    ScoreBinding.Source = t_e.t;
+                                    ScoreBinding.Source = tetris.t;
                                     Points.SetBinding(Label.ContentProperty, ScoreBinding);
 
                                     Binding LevelBinding = new Binding("Level");
                                     LevelBinding.Mode = BindingMode.OneWay;
-                                    LevelBinding.Source = t_e.t;
+                                    LevelBinding.Source = tetris.t;
                                     Level.SetBinding(Label.ContentProperty, LevelBinding);
 
                                 }
                                 else
                                 {
-                                    t_e.Stop_Tetris();
-                                    t_e = new TetrisExecute(wbm, dt_m, AuroraWindow);
-                                    ex_eff = t_e.tetris_exe;
-                                    dis_exe.Execute_Effect = ex_eff;
+                                    tetris.Stop_Tetris();
+                                    tetris = new TetrisExecute(monitor, monitorTimer, AuroraWindow);
+                                    ex_eff = tetris.tetris_exe;
+                                  
                                     Binding ScoreBinding = new Binding("Score");
                                     ScoreBinding.Mode = BindingMode.TwoWay;
-                                    ScoreBinding.Source = t_e.t;
+                                    ScoreBinding.Source = tetris.t;
                                     Points.SetBinding(Label.ContentProperty, ScoreBinding);
                                 }
-                                TaskSettings();
+                                SetUserControls();
                             });
 
 
@@ -305,11 +424,15 @@ namespace RGB_Window
 
             }
         }
-
+        /// <summary>
+        /// Das ist super
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="b"></param>
         public void StatusChanged(object sender, BoolArgs b)
         {
-            if (pw != null)
-                switch (pw.data.Connected)
+            if (portWindow != null)
+                switch (portWindow.data.Connected)
                 {
                     case true:
                         Status.Content = "Verbunden";
@@ -320,43 +443,48 @@ namespace RGB_Window
                 }
 
         }
-
-        private void Window_Bar_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
+       
         private void Init_Connect_Window()
         {
 
-            pw.Owner = this.AuroraWindow;
+            portWindow.Owner = this.AuroraWindow;
 
-            if (pw.IsActive == false)
+            if (portWindow.IsActive == false)
             {
                 //pw.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
-                pw.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
-                pw.ShowDialog();
+                portWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
+                portWindow.ShowDialog();
 
             }
-            else if (!pw.IsVisible)
+            else if (!portWindow.IsVisible)
             {
-                pw.Visibility = Visibility.Visible;
+                portWindow.Visibility = Visibility.Visible;
 
             }
         }
-        private void Aurora_Cycle_Tick(object sender, EventArgs e)
+
+        /// <summary>
+        /// This event loads the data of the monitorbitmap into a byte array
+        /// the bytearray is set as a property of <seealso cref="RgbLibrary.DataOut"/> class
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void monitorTimer_Tick(object sender, EventArgs e)
         {
 
-
-            bitmapbuffer = wbm.ToByteArray();
-            pw.data.setTransferBytes = bitmapbuffer;
+            bitmapbuffer = monitor.ToByteArray();
+            portWindow.data.TransferBytes = bitmapbuffer;
             if (ex_eff != null)
                 ex_eff();
-
-
-            wbm.Blit(new Rect(new Size(68, 42)), maskBitmap, new Rect(new Size(68, 42)), WriteableBitmapExtensions.BlendMode.Multiply);
-
+            monitor.Blit(new Rect(new Size(68, 42)), filterBitmap, new Rect(new Size(68, 42)),
+                        WriteableBitmapExtensions.BlendMode.Multiply);
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Menu_Mouse_Down(object sender, RoutedEventArgs e)
         {
             FrameworkElement feSource = e.Source as FrameworkElement;
@@ -366,88 +494,87 @@ namespace RGB_Window
                     Init_Connect_Window();
                     break;
                 case "Bluetooth":
-                    Bluetooth_Window b_w = new Bluetooth_Window(this);
+                    BluetoothWindow b_w = new BluetoothWindow(this);
                     b_w.Show();
                     break;
                 case "Draw":
-                    if (t_e != null)
+                    if (tetris != null)
                     {
-                        t_e.Stop_Tetris();
+                        tetris.Stop_Tetris();
                       
                     }
-                    if (v != null)
-                        v.RunVideo = false;
+                    if (video != null)
+                        video.RunVideo = false;
                     if (webcam != null)
                         webcam.closeWebcam();
 
                     runningTask = RunningTask.Draw;
-                    draw = true;
+                    drawAccept = true;
 
+                    draw = new Draw(drawlayer,monitorImg,monitor);
+                    ex_eff = draw.Draw_execute;
+                   
 
-                    d = new Draw(wh,img3,wbm);
-                    ex_eff = d.Draw_execute;
-                    dis_exe.Execute_Effect = ex_eff;
-
-                    d.setColor = Color.FromArgb(255, 0, 0, 255);
-                    d.setDrawtype = Drawtype.rectangle;
+                    draw.setColor = Color.FromArgb(255, 0, 0, 255);
+                    draw.setDrawtype = Drawtype.rectangle;
 
                     Binding ColorBinding = new Binding("setColor");
-                    ColorBinding.Source = d;
+                    ColorBinding.Source = draw;
                     ColorBinding.Mode = BindingMode.TwoWay;
                     DrawingColorPicker.SetBinding(Xceed.Wpf.Toolkit.ColorCanvas.SelectedColorProperty, ColorBinding);
 
                     break;
                 case "Effects":
-                    if (t_e != null)
+                    if (tetris != null)
                     {
-                        t_e.Stop_Tetris();
+                        tetris.Stop_Tetris();
                       
                     }
-                    if (v != null)
-                        v.RunVideo = false;
+                    if (video != null)
+                        video.RunVideo = false;
                     if (webcam != null)
                         webcam.closeWebcam();
 
                     
                     runningTask = RunningTask.Effect;
-                    draw = false;
-                    ex_eff = p.Plasma_execute;
-                    dis_exe.Execute_Effect = ex_eff;
-                    dt_m.IsEnabled = true;
+                    drawAccept = false;
+                    ex_eff = plasma.Plasma_execute;
+                  
+                    monitorTimer.IsEnabled = true;
 
                     break;
                 case "Images":
-                    if (t_e != null)
+                    if (tetris != null)
                     {
-                        t_e.Stop_Tetris();
-                        wbm = BitmapFactory.New(68, 42);
-                        img3.Source = wbm;
+                        tetris.Stop_Tetris();
+                        monitor = BitmapFactory.New(68, 42);
+                        monitorImg.Source = monitor;
 
                     }
                     if (webcam != null)
                         webcam.closeWebcam();
-                    if (v != null)
-                        v.RunVideo = false;
+                    if (video != null)
+                        video.RunVideo = false;
 
 
-                    draw = false;
-                    img3.Source = wbm;
+                    drawAccept = false;
+                    monitorImg.Source = monitor;
                     runningTask = RunningTask.Image;
 
-                    ip = new ImagePixelate(wbm);
+                    ip = new ImagePixelate(monitor);
                     ex_eff = ip.execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                   
 
 
 
                     break;
 
                 case "Video":
-                    if (t_e != null)
+                    if (tetris != null)
                     {
-                        t_e.Stop_Tetris();
+                        tetris.Stop_Tetris();
 
-                        img3.Source = wbm;
+                        monitorImg.Source = monitor;
 
                     }
                     if (webcam != null)
@@ -455,64 +582,68 @@ namespace RGB_Window
                     runningTask = RunningTask.Video;
 
                     CentralMonitor.IsEnabled = false;
-                    draw = false;
+                    drawAccept = false;
 
-                    v = new Video(wbm);
-                    ex_eff = v.video_execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                    video = new Video(monitor);
+                    ex_eff = video.video_execute;
+                   
 
-                    v.RunVideo = true;
+                    video.RunVideo = true;
 
                     break;
                 case "Tetris":
 
                     if (webcam != null)
                         webcam.closeWebcam();
-                    if (v != null)
-                        v.RunVideo = false;
+                    if (video != null)
+                        video.RunVideo = false;
                     runningTask = RunningTask.Tetris;
-                    draw = false;
+                    drawAccept = false;
 
 
-                    if (t_e == null)
+                    if (tetris == null)
                     {
 
-                        t_e = new TetrisExecute(wbm, dt_m, AuroraWindow);
-                        ex_eff = t_e.tetris_exe;
-                        dis_exe.Execute_Effect = ex_eff;
+                        tetris = new TetrisExecute(monitor, monitorTimer, AuroraWindow);
+                        ex_eff = tetris.tetris_exe;
+                      
 
 
                     }
                     else
                     {
-                        t_e.Stop_Tetris();
-                        t_e = new TetrisExecute(wbm, dt_m, AuroraWindow);
-                        ex_eff = t_e.tetris_exe;
-                        dis_exe.Execute_Effect = ex_eff;
+                        tetris.Stop_Tetris();
+                        tetris = new TetrisExecute(monitor, monitorTimer, AuroraWindow);
+                        ex_eff = tetris.tetris_exe;
+                      
                     }
                     break;
                 case "Webcam":
                     runningTask = RunningTask.Webcam;
                     CentralMonitor.IsEnabled = false;
-                    draw = false;
+                    drawAccept = false;
 
-                    if (t_e != null)
-                        t_e.Stop_Tetris();
+                    if (tetris != null)
+                        tetris.Stop_Tetris();
                     if (webcam == null)
                     {
-                        webcam = new Webcam(wbm);
+                        webcam = new Webcam(monitor);
                     }
-                    if (v != null)
-                        v.RunVideo = false;
-                    webcam.resumeWebcam(wbm);
+                    if (video != null)
+                        video.RunVideo = false;
+                    webcam.resumeWebcam(monitor);
                     ex_eff = webcam.Webcam_execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                   
                     break;
 
             }
-            TaskSettings();
+            SetUserControls();
         }
-        private void TaskSettings()
+        /// <summary>
+        /// SetUserControls is called in <seealso cref="Aurora.Menu_Mouse_Down"/>
+        /// the layoutpanels are hided or shown with the <seealso cref="System.Windows.Visibility"/> property
+        /// </summary>
+        private void SetUserControls()
         {
             switch (runningTask)
             {
@@ -523,9 +654,8 @@ namespace RGB_Window
                     ImageBar.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
                     CentralMonitor.IsEnabled = true;
-
-                    wbm.Clear();
-                    wh.Clear();
+                    monitor.Clear();
+                    drawlayer.Clear();
                     break;
 
                 case RunningTask.Effect:
@@ -535,8 +665,8 @@ namespace RGB_Window
                     VideoBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Visible;
                     Tetrisbar.Visibility = Visibility.Collapsed;
-                    img3.Source = wbm;
-                    wbm.Clear();
+                    monitorImg.Source = monitor;
+                    monitor.Clear();
                     break;
                 case RunningTask.Image:
                     ImageBar.Visibility = Visibility.Visible;
@@ -545,9 +675,9 @@ namespace RGB_Window
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
                     CentralMonitor.IsEnabled = false;
-                    img3.Source = wbm;
-                    wbm.Clear();
-                    wh.Clear();
+                    monitorImg.Source = monitor;
+                    monitor.Clear();
+                    drawlayer.Clear();
 
                     break;
                 case RunningTask.Video:
@@ -556,20 +686,20 @@ namespace RGB_Window
                     DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
-                    img3.Source = wbm;
-                    wbm.Clear();
-                    wh.Clear();
+                    monitorImg.Source = monitor;
+                    monitor.Clear();
+                    drawlayer.Clear();
                     break;
                 case RunningTask.Tetris:
 
                     Binding ScoreBinding = new Binding("Score");
                     ScoreBinding.Mode = BindingMode.OneWay;
-                    ScoreBinding.Source = t_e.t;
+                    ScoreBinding.Source = tetris.t;
                     Points.SetBinding(Label.ContentProperty, ScoreBinding);
 
                     Binding LevelBinding = new Binding("Level");
                     LevelBinding.Mode = BindingMode.OneWay;
-                    LevelBinding.Source = t_e.t;
+                    LevelBinding.Source = tetris.t;
                     Level.SetBinding(Label.ContentProperty, LevelBinding);
 
                     ImageBar.Visibility = Visibility.Collapsed;
@@ -578,8 +708,8 @@ namespace RGB_Window
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Visible;
                    
-                    wbm.Clear();
-                    wh.Clear();
+                    monitor.Clear();
+                    drawlayer.Clear();
                     break;
                 case RunningTask.Webcam:
                     ImageBar.Visibility = Visibility.Collapsed;
@@ -587,9 +717,9 @@ namespace RGB_Window
                     DrawingBar.Visibility = Visibility.Collapsed;
                     EffectSelection.Visibility = Visibility.Collapsed;
                     Tetrisbar.Visibility = Visibility.Collapsed;
-                    img3.Source = wbm;
-                    wbm.Clear();
-                    wh.Clear();
+                    monitorImg.Source = monitor;
+                    monitor.Clear();
+                    drawlayer.Clear();
                     break;
                 default:
                     break;
@@ -600,44 +730,44 @@ namespace RGB_Window
         private void Configure_Mouse_Down(object sender, RoutedEventArgs e)
         {
 
-            if (Configure_Window != null)
-                switch (Configure_Window.ToString())
+            if (SelectedWindow != null)
+                switch (SelectedWindow.ToString())
                 {
 
                     case "RGB_Window.Windows.ExpandingObjects_Options":
-                        e_o.Show();
+                        expandingObjectsWindow.Show();
                         break;
 
                     case "RGB_Window.Windows.MovingText_Options":
-                        mt_o.Show();
+                        movingTextOptionWindow.Show();
                         break;
                     case "RGB_Window.Windows.GradientColor_Options":
-                        gc_o.Show();
+                        gradientOptionWindow.Show();
                         break;
                     case "RGB_Window.Windows.Plasma_Options":
-                        p_o.Show();
+                        plasmaOptionWindow.Show();
                         break;
 
                 }
         }
         private void HideOptionWindow()
         {
-            if (Configure_Window != null)
-                switch (Configure_Window.ToString())
+            if (SelectedWindow != null)
+                switch (SelectedWindow.ToString())
                 {
 
                     case "RGB_Window.Windows.ExpandingObjects_Options":
-                        e_o.Hide();
+                        expandingObjectsWindow.Hide();
                         break;
 
                     case "RGB_Window.Windows.MovingText_Options":
-                        mt_o.Hide();
+                        movingTextOptionWindow.Hide();
                         break;
                     case "RGB_Window.Windows.GradientColor_Options":
-                        gc_o.Hide();
+                        gradientOptionWindow.Hide();
                         break;
                     case "RGB_Window.Windows.Plasma_Options":
-                        p_o.Hide();
+                        plasmaOptionWindow.Hide();
                         break;
 
                 }
@@ -648,40 +778,40 @@ namespace RGB_Window
             switch (LeftMonitorSelect.SelectionBoxItem.ToString())
             {
                 case "ExpandingObjects":
-                    ex_eff = ex.ExpandingObjects_execute;
-                    dis_exe.Execute_Effect = ex_eff;
-                    Configure_Window = e_o;
-                    e_o.Show();
+                    ex_eff = expandingObjects.ExpandingObjects_execute;
+                   
+                    SelectedWindow = expandingObjectsWindow;
+                    expandingObjectsWindow.Show();
                     break;
                 case "MovingBalls":
-                    exp = new CollisonBalls(wbm);
+                    exp = new CollisonBalls(monitor);
                     ex_eff = exp.CollisonBalls_execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                   
                     break;
                 case "ScrollingText":
-                    ex_eff = mt.MovingText_execute;
-                    dis_exe.Execute_Effect = ex_eff;
-                    Configure_Window = mt_o;
-                    mt_o.Show();
+                    movingText.ColorPalette = Palettes.BlueGreen;
+                    ex_eff = movingText.MovingText_execute;
+                    SelectedWindow = movingTextOptionWindow;
+                    movingTextOptionWindow.Show();
                     break;
                 case "Plasma":
-                    p_o.Show();
-                    Configure_Window = p_o;
-                    ex_eff = p.Plasma_execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                    plasmaOptionWindow.Show();
+                    SelectedWindow = plasmaOptionWindow;
+                    ex_eff = plasma.Plasma_execute;
+                    
                     break;
                 case "GradientColor":
-                    gc_o.Show();
-                    Configure_Window = gc_o;
-                    cg.GradientMode = Gradient.Radial;
-                    ex_eff = cg.ColorGradient_execute;
-                    dis_exe.Execute_Effect = ex_eff;
+                    gradientOptionWindow.Show();
+                    SelectedWindow = gradientOptionWindow;
+                    colorGradient.GradientMode = Gradient.Radial;
+                    ex_eff = colorGradient.ColorGradient_execute;
+                    
                     break;
                 case "None":
-                    wbm.Clear();
+                    monitor.Clear();
                     ex_eff = null;
-                    dis_exe.Execute_Effect = ex_eff;
-                    Configure_Window = null;
+                   
+                    SelectedWindow = null;
                     break;
             }
         }
@@ -691,16 +821,16 @@ namespace RGB_Window
             switch (f.Name)
             {
                 case "PlayVideo":
-                    if (v != null)
+                    if (video != null)
                     {
-                        v.Path = VideoPath.Text;
-                        v.play();
+                        video.Path = VideoPath.Text;
+                        video.play();
                     }
                     break;
                 case "LoadVideo":
-                    if (v != null)
-                        v.path();
-                    VideoPath.Text = v.Path;
+                    if (video != null)
+                        video.path();
+                    VideoPath.Text = video.Path;
                     break;
                 case "LoadImage":
                     if (ip != null)
@@ -710,22 +840,22 @@ namespace RGB_Window
                     }
                     break;
                 case "Rectangle":
-                    d.setDrawtype = Drawtype.rectangle;
+                    draw.setDrawtype = Drawtype.rectangle;
                     break;
                 case "Line":
-                    d.setDrawtype = Drawtype.line;
+                    draw.setDrawtype = Drawtype.line;
                     break;
                 case "Point":
-                    d.setDrawtype = Drawtype.point;
+                    draw.setDrawtype = Drawtype.point;
                     break;
                 case "Ellipse":
-                    d.setDrawtype = Drawtype.circle;
+                    draw.setDrawtype = Drawtype.circle;
                     break;
                 case "FilledEllipse":
-                    d.setDrawtype = Drawtype.fillcircle;
+                    draw.setDrawtype = Drawtype.fillcircle;
                     break;
                 case "FilledRectangle":
-                    d.setDrawtype = Drawtype.fillrectangle;
+                    draw.setDrawtype = Drawtype.fillrectangle;
                     break;
 
             }
@@ -733,13 +863,13 @@ namespace RGB_Window
         private void Draw_SetOrgin(object sender, RoutedEventArgs e)
         {
 
-            if (d != null)
+            if (draw != null)
             {
 
                 Point mouse = new Point();
                 mouse.X = 68 * Mouse.GetPosition(CentralMonitor).X / CentralMonitor.ActualWidth;
                 mouse.Y = 42 * Mouse.GetPosition(CentralMonitor).Y / CentralMonitor.ActualHeight;
-                d.setOrigin = mouse;
+                draw.setOrigin = mouse;
                 zw = mouse;
 
             }
@@ -748,25 +878,29 @@ namespace RGB_Window
         {
             if (CentralMonitor.IsEnabled)
             {
-                img3.Source = wbm;
-                wbm.Blit(new Rect(new Size(68, 42)), wh, new Rect(new Size(68, 42)));
-                wh.Blit(new Rect(new Size(68, 42)), wbm, new Rect(new Size(68, 42)));
+                monitorImg.Source = monitor;
+               
+                monitor.Blit(new Rect(new Size(68, 42)), drawlayer, new Rect(new Size(68, 42)));
+                drawlayer.Blit(new Rect(new Size(68, 42)), monitor, new Rect(new Size(68, 42)));
             }
 
         }
         private void DrawOnMonitor(object sender, RoutedEventArgs e)
         {
-            if (d != null && Mouse.LeftButton == MouseButtonState.Pressed)
+            monitorImg.Source = drawlayer;
+            drawlayer.Blit(new Rect(new Size(68, 42)), monitor, new Rect(new Size(68, 42)));
+         
+            if (draw != null && Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 Point mouse = new Point();
-                mouse.X = 68 * Mouse.GetPosition(img3).X / img3.ActualWidth;
-                mouse.Y = 42 * Mouse.GetPosition(img3).Y / img3.ActualHeight;
+                mouse.X = 68 * Mouse.GetPosition(monitorImg).X / monitorImg.ActualWidth;
+                mouse.Y = 42 * Mouse.GetPosition(monitorImg).Y / monitorImg.ActualHeight;
 
                 if (zw != mouse)
                 {
                     old = zw;
-                    d.setMousePos = old;
-                    d.del();
+                    draw.setMousePos = old;
+                    draw.del();
 
                     zw = mouse;
 
@@ -776,15 +910,15 @@ namespace RGB_Window
                     zw = mouse;
 
                 }
-                d.setMousePos = mouse;
-                d.draw();
+                draw.setMousePos = mouse;
+                draw.draw();
 
             }
         }
         private void Draw_enableMonitor(object sender, MouseButtonEventArgs e)
         {
 
-            if (draw)
+            if (drawAccept)
                 CentralMonitor.IsEnabled = true;
         }
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -813,14 +947,14 @@ namespace RGB_Window
         }
         private void AuroraWindow_Loaded_1(object sender, RoutedEventArgs e)
         {
-            m_o = new Mask_Options(this);
-            m_o.WindowStartupLocation = System.Windows.WindowStartupLocation.Manual;
+            filterOptionWindow = new FilterOptionWindow(this);
+            filterOptionWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.Manual;
             try
             {
                 var position = this.PointToScreen(new Point(0, 0));
-                m_o.Left = position.X + this.Width;
-                m_o.Top = position.Y;
-                m_o.Show();
+                filterOptionWindow.Left = position.X + this.Width;
+                filterOptionWindow.Top = position.Y;
+                filterOptionWindow.Show();
             }
             catch (Exception ex)
             {
@@ -830,15 +964,15 @@ namespace RGB_Window
         }
         private void AuroraWindow_StateChanged(object sender, EventArgs e)
         {
-            if (m_o != null)
+            if (filterOptionWindow != null)
             {
                 if (this.WindowState == WindowState.Minimized)
                 {
 
-                    m_o.WindowState = WindowState.Minimized;
+                    filterOptionWindow.WindowState = WindowState.Minimized;
                 }
                 if (this.WindowState == WindowState.Normal)
-                    m_o.WindowState = WindowState.Normal;
+                    filterOptionWindow.WindowState = WindowState.Normal;
             }
 
         }

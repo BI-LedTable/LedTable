@@ -9,15 +9,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Windows;
 using System.Globalization;
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public class MovingText
     {
     
         private WriteableBitmap wb;
         private TextBox tb;
-       
-      
+
+        private Palettes palette;
         private RenderTargetBitmap rtb;
         private Point Pos;
         private String mode;
@@ -25,11 +25,36 @@ namespace RGB_Libary
         DrawingVisual dv;
         DrawingContext drawingContext;
         SolidColorBrush c;
-        Color[] color;
-        public Color TextColor 
+        Color[] colors;
+        public Palettes ColorPalette 
         {
-            set { tb.Foreground = new SolidColorBrush(value); }
+            set { 
+                    palette = value;
+                    InitColorPallette();
+                }
             
+        }
+        private void InitColorPallette()
+        {
+            switch (palette)
+            {
+                case Palettes.RedGreenBlue:
+                    colors = HSV.RedGreenBlue();
+                    break;
+                case Palettes.BlackWhite:
+                    colors = HSV.BlackWhite();
+                    break;
+                case Palettes.RedGreen:
+                    colors = HSV.RedGreen();
+                    break;
+                case Palettes.RedBlue:
+                    colors = HSV.RedBlue();
+                    break;
+                case Palettes.BlueGreen:
+                    colors = HSV.BlueGreen();
+                    break;
+
+            }
         }
 
         public bool ColorScroll { get; set; }
@@ -68,7 +93,7 @@ namespace RGB_Libary
         {
 
            
-            color = HSV.RedGreenBlue();
+            colors = HSV.RedGreenBlue();
             tb = new TextBox();
             tb.FontSize = 20;
             tb.Text = ("Text");
@@ -90,14 +115,14 @@ namespace RGB_Libary
             {
                 case "ScrollX":
                     counter++;
-                    tb.Foreground = new SolidColorBrush(color[counter % 360]);
+                   tb.Foreground = new SolidColorBrush(colors[counter % 360]);
                     if (Pos.X < 68)
                         Pos.X++;
                     else Pos.X = -text.Width;
                     break;
                 case "ScrollY":
                     counter++;
-                    tb.Foreground = new SolidColorBrush(color[counter % 360]);
+                   tb.Foreground = new SolidColorBrush(colors[counter % 360]);
                     if (Pos.Y < 42)
                         Pos.Y++;
                     else Pos.Y= -text.Height;

@@ -5,7 +5,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:Extended="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro" 
-	x:Class="RGB_Window.MainWindow"
+	x:Class="Aurora.MainWindow"
 	x:Name="AuroraWindow"
 	Title="Aurora"
 	WindowStartupLocation="CenterScreen"   ResizeMode="CanMinimize" GlowBrush="#CC119EDA" Closed="AuroraWindow_Closed_1" Loaded="AuroraWindow_Loaded_1" StateChanged="AuroraWindow_StateChanged" >
@@ -134,6 +134,8 @@
             <Label>Level</Label>
             <Label Name="Level"></Label>
         </StackPanel>
+        
+        
         <StackPanel Name="DrawingBar" Margin="10"  HorizontalAlignment="Center" VerticalAlignment="Bottom"   DockPanel.Dock="Top" Visibility="Collapsed" Orientation="Horizontal" >
             <TabControl SelectionChanged="TabControl_SelectionChanged">
                 <TabItem Header="Draw">
@@ -198,7 +200,7 @@
             <Button Margin="10" HorizontalAlignment="Stretch" Click="Configure_Mouse_Down">Configure</Button>
         </StackPanel>
         <StackPanel Background="Black"  VerticalAlignment="Center" Name="CentralMonitor" Margin="0" HorizontalAlignment="Center"  MouseUp="BlitWithLayer"  MouseDown="Draw_SetOrgin" MouseMove="DrawOnMonitor">
-                <Image  Name="img3"></Image>
+                <Image  Name="monitorImg"></Image>
         </StackPanel>
         
      

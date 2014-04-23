@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Shapes;
 using System.Threading;
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     public class Ball 
     {

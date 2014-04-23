@@ -12,67 +12,111 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Xceed;
-using RGB_Libary;
+using RgbLibrary;
 using MahApps.Metro.Controls;
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
-    /// Interaktionslogik für MovintText_Options.xaml
+    /// MovingTextOptions is a window derived from MetroWindow.
+    /// The user can change text settings according to the <see cref="RgbLibrary.MovingText"/> object
     /// </summary>
-    public partial class MovingText_Options : MetroWindow
+    public partial class MovingTextOptionsWindow : MetroWindow
     {
-        private MovingText m_t;
-        public MovingText_Options(MovingText m_t)
+        private MovingText movingText;
+        /// <summary>
+        /// The MovingTextOptionsWindow nees a <see cref="RgbLibrary.MovingText"/> object.
+        /// <para>
+        /// <list type="bullet">
+        /// <listheader>
+        /// <description>The user can change the properties:</description>
+        /// </listheader>
+        /// <item>
+        /// <description>
+        /// Color
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Text
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// FontSize
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Position in x-achses
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Position in y-achses
+        /// </description>
+        /// <item>
+        /// <description>
+        /// Scroll Mode
+        /// </description>
+        /// </item>
+        /// </item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="movingText"></param>
+        public MovingTextOptionsWindow(MovingText movingText)
         {
             InitializeComponent();
-            this.m_t = m_t;
+            this.movingText = movingText;
             this.SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
             this.Topmost = true;
-            ColorPicker.UsingAlphaChannel = true;
-            ColorPicker.DisplayColorAndName = true;
-            ColorPicker.SelectedColor = Colors.White;
 
-            Binding ColorBinding = new Binding("Color");
-            ColorBinding.Source = this.m_t;
+
+            Binding ColorBinding = new Binding("ColorPalette");
+            ColorBinding.Source = this.movingText;
             ColorBinding.Mode = BindingMode.TwoWay;
-            ColorPicker.SetBinding(Xceed.Wpf.Toolkit.ColorPicker.SelectedColorProperty, ColorBinding);
+            Palettes.SetBinding(ComboBox.TextProperty, ColorBinding);
 
             Binding TextBinding = new Binding("Text");
-            TextBinding.Source = this.m_t;
+            TextBinding.Source = this.movingText;
             TextBinding.Mode = BindingMode.TwoWay;
             TextBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
             Text.SetBinding(TextBox.TextProperty, TextBinding);
 
             Binding FontSizeBinding = new Binding("FontSize");
-            FontSizeBinding.Source = this.m_t;
+            FontSizeBinding.Source = this.movingText;
             FontSizeBinding.Mode = BindingMode.TwoWay;
             FontSize.SetBinding(Slider.ValueProperty, FontSizeBinding);
 
             Binding ModeBinding = new Binding("Mode");
-            ModeBinding.Source = this.m_t;
+            ModeBinding.Source = this.movingText;
             ModeBinding.Mode = BindingMode.TwoWay;
             Selected_Objects.SetBinding(ComboBox.SelectedValueProperty, ModeBinding);
 
             Binding PosYBinding = new Binding("PosY");
-            PosYBinding.Source = this.m_t;
+            PosYBinding.Source = this.movingText;
             PosYBinding.Mode = BindingMode.TwoWay;
             PosY.SetBinding(Slider.ValueProperty, PosYBinding);
 
             Binding PosXBinding = new Binding("PosX");
-            PosXBinding.Source = this.m_t;
+            PosXBinding.Source = this.movingText;
             PosXBinding.Mode = BindingMode.TwoWay;
             PosX.SetBinding(Slider.ValueProperty, PosXBinding);
 
 
         }
+        /// <summary>
+        /// The OnClosing events for the OptionWindow are override.
+        /// They should stay in background, in stead of to be close.
+        /// Otherwise a new instance of the object has to be created,
+        /// which means that the settings, the user has changed would have been lost
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }
-        public void Drag_Event(object sender, RoutedEventArgs e)
-        {
-            DragMove();
-        }
+     
     }
 }

@@ -11,72 +11,104 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using RGB_Libary;
+using RgbLibrary;
 using MahApps.Metro.Controls;
 using StickyWindowLibrary;
 using Blue.Windows;
 
 
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
     /// Interaktionslogik für Plasma_Window.xaml
     /// </summary>
-    public partial class Mask_Options : MetroWindow
+    public partial class FilterOptionWindow : MetroWindow
     {
         private StickyWindow stickyWindow;
-        public Mask_Options(MainWindow mw)
+        /// <summary>
+        /// The FilterOptionWindow needs a <see cref="Aurora.MainWindow"/> object
+        /// <para>
+        /// <list type="bullet">
+        /// <listheader>
+        /// <description>
+        /// The user can change the properties:
+        /// </description>
+        /// </listheader>
+        /// <item>
+        /// <description>Brigthness</description>
+        /// </item>
+        /// <item>
+        /// <description>Red component</description>
+        /// </item>
+        /// <item>
+        /// <description>Blue component</description>
+        /// </item>
+        /// <item>
+        /// <description>Green component</description>
+        /// </item>
+        /// </list>
+        /// </para>
+        /// </summary>
+        /// <param name="mainWindow"></param>
+        public FilterOptionWindow(MainWindow mainWindow)
         {
            
             InitializeComponent();
           
-            ColorMask.Height = mw.Height;
+            ColorMask.Height = mainWindow.Height;
             this.SizeToContent = System.Windows.SizeToContent.WidthAndHeight;
             this.Loaded += Mask_Options_Loaded;
 
 
             Binding BrightnessBinding = new Binding("Brightness");
-            BrightnessBinding.Source = mw;
+            BrightnessBinding.Source = mainWindow;
             BrightnessBinding.Mode = BindingMode.TwoWay;
             BrightnessSlider.SetBinding(Slider.ValueProperty, BrightnessBinding);
 
             Binding RedBinding = new Binding("RedMask");
-            RedBinding.Source = mw;
+            RedBinding.Source = mainWindow;
             RedBinding.Mode = BindingMode.TwoWay;
             RedSlider.SetBinding(Slider.ValueProperty, RedBinding);
 
             Binding BlueBinding = new Binding("BlueMask");
-            BlueBinding.Source = mw;
+            BlueBinding.Source = mainWindow;
             BlueBinding.Mode = BindingMode.TwoWay;
             BlueSlider.SetBinding(Slider.ValueProperty, BlueBinding);
 
             Binding GreenBinding = new Binding("GreenMask");
-            GreenBinding.Source = mw;
+            GreenBinding.Source = mainWindow;
             GreenBinding.Mode = BindingMode.TwoWay;
             GreenSlider.SetBinding(Slider.ValueProperty, GreenBinding);
 
 
         }
-
-        void Mask_Options_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// A new StickyWindow is initalised, which says the filter window
+        /// should stick to the application main window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Mask_Options_Loaded(object sender, RoutedEventArgs e)
         {
             stickyWindow = new StickyWindow(this);
-            stickyWindow.StickToScreen = true;
+            stickyWindow.StickToScreen = false;
             stickyWindow.StickToOther = true;
             stickyWindow.StickOnResize = true;
             stickyWindow.StickOnMove = true;
         }
 
+        /// <summary>
+        /// The OnClosing events for the OptionWindow are override.
+        /// They should stay in background, in stead of to be close.
+        /// Otherwise a new instance of the object has to be created,
+        /// which means that the settings, the user has changed would have been lost
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
             this.Hide();
         }
-        public void Drag_Event(object sender, RoutedEventArgs e)
-        {
-            DragMove();
-        }
-
         private void Expander_Expanded_1(object sender, RoutedEventArgs e)
         {
             this.SizeToContent = SizeToContent.WidthAndHeight;

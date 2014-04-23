@@ -17,7 +17,7 @@ using System.Diagnostics;
 using System.Windows.Controls;
 
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
 
 

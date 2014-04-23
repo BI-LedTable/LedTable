@@ -12,18 +12,18 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Xceed;
-using RGB_Libary;
+using RgbLibrary;
 using MahApps.Metro.Controls;
 
-namespace RGB_Window.Windows
+namespace Aurora.Windows
 {
     /// <summary>
     /// Interaktionslogik für ExpandingObjects_Options.xaml
     /// </summary>
-    public partial class ExpandingObjects_Options : MetroWindow
+    public partial class ExpandingObjectsOptionsWindow : MetroWindow
     {
         private ExpandingObjects e_o;
-        public ExpandingObjects_Options(ExpandingObjects e_o)
+        public ExpandingObjectsOptionsWindow(ExpandingObjects e_o)
         {
        
             InitializeComponent();
@@ -52,11 +52,13 @@ namespace RGB_Window.Windows
             Selected_Objects.SetBinding(ComboBox.SelectedValueProperty, ObjectBinding);
             
         }
-      
-        public void Drag_Event(object sender, RoutedEventArgs e)
-        {
-            DragMove();
-        }
+        /// <summary>
+        /// The OnClosing events for the OptionWindow are override.
+        /// They should stay in background, in stead of to be close.
+        /// Otherwise a new instance of the object has to be created,
+        /// which means that the settings, the user has changed would have been lost
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;

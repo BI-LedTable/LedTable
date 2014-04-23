@@ -1,4 +1,4 @@
-﻿<Controls:MetroWindow x:Class="RGB_Window.Windows.ExpandingObjects_Options"
+﻿<Controls:MetroWindow x:Class="Aurora.Windows.ExpandingObjectsOptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ColorPicker="http://schemas.xceed.com/wpf/xaml/toolkit"

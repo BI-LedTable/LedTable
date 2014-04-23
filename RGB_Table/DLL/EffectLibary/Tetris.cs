@@ -11,11 +11,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using System.ComponentModel;
-using RGB_Libary;
+using RgbLibrary;
 using System.Windows.Interop;
 
 
-namespace RGB_Libary
+namespace RgbLibrary
 {
     
     
