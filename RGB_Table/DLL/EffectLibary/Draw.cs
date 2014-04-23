@@ -67,31 +67,36 @@ namespace RGB_Libary
                {
                    int draw_pos_x = Convert.ToInt16(data.Split(' ')[0]);
                    int draw_pos_y = Convert.ToInt16(data.Split(' ')[1]);
-                   byte draw_col_r = Convert.ToByte(data.Split(' ')[2]);
-                   byte draw_col_g = Convert.ToByte(data.Split(' ')[3]);
-                   byte draw_col_b = Convert.ToByte(data.Split(' ')[4]);
+                   int draw_col_r = Convert.ToInt32(data.Split(' ')[2]);
+                   int draw_col_g = Convert.ToInt32(data.Split(' ')[3]);
+                   int draw_col_b = Convert.ToInt32(data.Split(' ')[4]);
                    //byte draw_col_b = 100;
-                   Color draw_col = Color.FromRgb(draw_col_r, draw_col_g, draw_col_b);
 
                    setDrawtype = Drawtype.point;
-                   mousepos.X = draw_pos_x;
-                   mousepos.Y = draw_pos_y;
+                   if (draw_pos_x < 70)
+                   {
+                       mousepos.X = draw_pos_x;
+                   }
+                   if (draw_pos_y < 43)
+                   {
+                       mousepos.Y = draw_pos_y;
+                   }
 
 
-                   int a = 68;
-                   int ba = 42;
-                   origin.X = 0;
-                   origin.Y = 0;
 
-                //Zum testen
-               //Random rnd = new Random();
-               //byte r = Convert.ToByte(rnd.Next(0, 255));
-               //byte g = Convert.ToByte(rnd.Next(0, 255));
-               //byte b = Convert.ToByte(rnd.Next(0, 255));
+                   if ((draw_col_r < 256) && (draw_col_g < 256) && (draw_col_b < 256))
+                   {
+                       byte r = Convert.ToByte(draw_col_r);
+                       byte g = Convert.ToByte(draw_col_g);
+                       byte b = Convert.ToByte(draw_col_b);
+                       Color draw_col = Color.FromRgb(r, g, b);
 
-               //Color c = Color.FromRgb(r, g, b);
+                       Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)draw_pos_x, (int)draw_pos_y, draw_col)));
+                   }
 
-                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)draw_pos_x, (int)draw_pos_y, draw_col)));
+                 
+
+                   
                }
            }
            catch (Exception exc)
