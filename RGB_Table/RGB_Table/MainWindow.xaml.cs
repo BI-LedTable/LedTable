@@ -354,9 +354,56 @@ namespace Aurora
 
                             break;
                         }
-                    case "Picture":       //Pixelated Picture
+                    case "Fotobearbeitung":       //Pixelated Picture
                         {
                             Mode = 1;
+
+                            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, (ThreadStart)delegate
+                            {
+                                if (tetris != null)
+                                {
+                                    tetris.Stop_Tetris();
+                                    monitor = BitmapFactory.New(68, 42);
+                                    monitorImg.Source = monitor;
+
+                                }
+
+                                runningTask = RunningTask.Draw;
+                                drawAccept = true;
+                                if (video != null)
+                                    video.RunVideo = false;
+                                if (webcam != null)
+                                    webcam.closeWebcam();
+
+                                try
+                                {
+                                    draw = new Draw(drawlayer, monitorImg, monitor);
+                                }
+                                catch (Exception exc)
+                                {
+                                }
+                                ex_eff = draw.Draw_execute;
+
+                                draw.setColor = Color.FromArgb(0, 200, 0, 255);
+                                draw.setDrawtype = Drawtype.point;
+
+                                Binding ColorBinding = new Binding("setColor");
+                                ColorBinding.Source = draw;
+                                ColorBinding.Mode = BindingMode.TwoWay;
+                                DrawingColorPicker.SetBinding(Xceed.Wpf.Toolkit.ColorCanvas.SelectedColorProperty, ColorBinding);
+
+                                SetUserControls();
+
+                                object GlassOfSugar = new Object();
+                                Slider slider = new Slider();
+                                Binding AmountBinding = new Binding("Amount");
+                                AmountBinding.Source = GlassOfSugar;
+                                AmountBinding.Mode = BindingMode.TwoWay;
+                                slider.SetBinding(Slider.ValueProperty, AmountBinding);
+
+
+                            });
+
                             break;
                         }
                     case "Tetris":       //Tetris
