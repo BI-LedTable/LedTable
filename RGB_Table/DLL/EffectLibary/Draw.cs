@@ -71,26 +71,37 @@ namespace RgbLibrary
                    //byte draw_col_b = 100;
 
                    setDrawtype = Drawtype.point;
-                   if (draw_pos_x < 70)
+                   if (draw_pos_x < 68)
                    {
                        mousepos.X = draw_pos_x;
                    }
-                   if (draw_pos_y < 43)
+                   if (draw_pos_y < 42)
                    {
                        mousepos.Y = draw_pos_y;
                    }
 
-
+                   //neue Bitmap anlegen!!
+                   //byte[] buffer anlegen
+                   //neue Bitmpa = BitmapFactory.New(1,1).FromByteArray(bytearr)
+                   //monitor = neue Bitmap;
 
 
                    if ((draw_col_r < 256) && (draw_col_g < 256) && (draw_col_b < 256))
                    {
-                       byte r = Convert.ToByte(draw_col_r);
-                       byte g = Convert.ToByte(draw_col_g);
-                       byte b = Convert.ToByte(draw_col_b);
-                       Color draw_col = Color.FromRgb(r, g, b);
+                       try
+                       {
+                           byte r = Convert.ToByte(draw_col_r);
+                           byte g = Convert.ToByte(draw_col_g);
+                           byte b = Convert.ToByte(draw_col_b);
+                           Color draw_col = Color.FromRgb(r, g, b);
 
-                       Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)draw_pos_x, (int)draw_pos_y, draw_col)));
+
+                           Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)mousepos.X, (int)mousepos.Y, draw_col)));
+                       }
+                       catch (Exception ex)
+                       {
+                           string excep = ex.ToString();
+                       }
                    }
 
 
