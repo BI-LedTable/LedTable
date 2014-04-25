@@ -490,7 +490,7 @@ namespace RgbLibrary
             {
                 try
                 {
-                    byte[] received_bytes = new byte[68*42*3];
+                    byte[] received_bytes = new byte[68];
 
                     if (Connected == true)
                     {
