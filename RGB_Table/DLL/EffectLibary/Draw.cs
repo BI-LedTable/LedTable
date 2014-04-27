@@ -53,12 +53,14 @@ namespace RgbLibrary
        }
 
        int Draw_Mode = 0; //Zur entscheidung zwischen Paint & Fotobearbeitungsmodus
+       int i = 0;
 
        private void Event_Paint_Handler(object sender, PropertyChangeArgs args)
        {
            try
            {
-
+               
+               byte[] buffer = new byte[50000];
                string data = args.mesg;
 
 
@@ -83,8 +85,10 @@ namespace RgbLibrary
 
                if (data == "Fertig")  //Das Übertragen der Fotodaten wurde abgeschlossen
                {
+
+                   i = 0;
                    //neue Bitmap anlegen!!
-                   byte[] buffer = new byte[50000];
+                  
 
                    ////daten aus dem Stream in ein Byte Array
                    //string[] data_buffer = new string[68*42*3];
@@ -102,7 +106,7 @@ namespace RgbLibrary
                    //Diese Bytes werden in ein großes Array geschrieben und an das Bitmap übergeben.
 
 
-                   buffer = Encoding.ASCII.GetBytes(data_Stream);
+                   //buffer = Encoding.ASCII.GetBytes(data_Stream);
 
                    try
                    {
@@ -114,6 +118,7 @@ namespace RgbLibrary
                    }
                    catch(Exception exc)
                    {
+                       
                    }
                }
                
@@ -121,7 +126,7 @@ namespace RgbLibrary
                if(Draw_Mode == 1)
                {
 
-                   //Überprüfung, ob das Argument eine Zahl ist - > eventuell sollte man dies durch eine Modus ABfrage MainWindow seitig ersetzen
+                   //Überprüfung, ob das Argument eine Zahl ist - > eventuell sollte man dies durch eine Modus Abfrage MainWindow seitig ersetzen
                    //string Str = args.mesg.Split(' ')[0];
                    //double Num = 0;
                    //bool isNum = double.TryParse(Str, out Num);  --> wirft noch einen Fehler?
@@ -174,7 +179,9 @@ namespace RgbLibrary
                {
                    //Versuchsewise unperfomante Variante - eventuell zur performanteren Variante mit Stringbuilder wechseln!!
                    //Verzögerungen können jedoch nur schwer festgestellt werden.
-                   data_Stream = data_Stream + data;
+                   //data_Stream = data_Stream + data;
+                   buffer[i] = Convert.ToByte(data);  //Neuer Ansatz - ARGB werden getrennt vom ANdroid Device gesendet
+                   i++;
                }
 
            }
