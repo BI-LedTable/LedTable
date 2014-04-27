@@ -512,12 +512,12 @@ namespace RgbLibrary
         private void read_data()
         {
 
-
+            byte[] received_bytes = new byte[68 * 42 * 3];
             while (stream != null)  //Sollte der Stream abbrechen (Die Verbindung abbrechen), so soll das Lesen beendet werden
             {
                 try
                 {
-                    byte[] received_bytes = new byte[68*42*3];
+                  
 
                     if (Connected == true)
                     {
