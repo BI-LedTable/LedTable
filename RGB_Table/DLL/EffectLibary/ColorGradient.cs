@@ -20,11 +20,7 @@ namespace RgbLibrary
     };
    
 
-    public enum Motion
-    {
-        Static,
-        Sinus
-    };
+   
    public class ColorGradient
     {
  
