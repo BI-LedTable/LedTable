@@ -14,15 +14,15 @@ namespace RgbLibrary
     public class MovingText
     {
     
-        private WriteableBitmap wb;
-        private TextBox tb;
+        private WriteableBitmap monitor;
+        private TextBox textBox;
 
         private Palettes palette;
-        private RenderTargetBitmap rtb;
+        private RenderTargetBitmap renderTargetBitmap;
         private Point Pos;
         private String mode;
         FormattedText text;
-        DrawingVisual dv;
+        DrawingVisual drawingVisual;
         DrawingContext drawingContext;
         SolidColorBrush c;
         Color[] colors;
@@ -60,7 +60,7 @@ namespace RgbLibrary
         public bool ColorScroll { get; set; }
         public String Text 
         {
-            set { tb.Text = value; }
+            set { textBox.Text = value; }
         }
         public String Mode
         {
@@ -71,7 +71,7 @@ namespace RgbLibrary
         }
         public Double FontSize
         {
-            set { tb.FontSize = value; }
+            set { textBox.FontSize = value; }
             
         }
         public double PosY 
@@ -86,7 +86,7 @@ namespace RgbLibrary
         public MovingText(WriteableBitmap wb) 
         {
            
-            this.wb = wb;
+            this.monitor = wb;
             init_MovingText();
         }
         private void init_MovingText() 
@@ -94,15 +94,15 @@ namespace RgbLibrary
 
            
             colors = HSV.RedGreenBlue();
-            tb = new TextBox();
-            tb.FontSize = 20;
-            tb.Text = ("Text");
-            tb.FontWeight = FontWeights.UltraLight;
-            tb.Foreground = Brushes.Purple;
+            textBox = new TextBox();
+            textBox.FontSize = 20;
+            textBox.Text = ("Text");
+            textBox.FontWeight = FontWeights.UltraLight;
+            textBox.Foreground = Brushes.White;
          
-            rtb = new RenderTargetBitmap(wb.PixelWidth, wb.PixelHeight, wb.DpiX, wb.DpiY, PixelFormats.Default);
+            renderTargetBitmap = new RenderTargetBitmap(monitor.PixelWidth, monitor.PixelHeight, monitor.DpiX, monitor.DpiY, PixelFormats.Default);
             Pos = new Point(0,0);
-            dv = new DrawingVisual();
+            drawingVisual = new DrawingVisual();
 
            
         }
@@ -115,39 +115,41 @@ namespace RgbLibrary
             {
                 case "ScrollX":
                     counter++;
-                   tb.Foreground = new SolidColorBrush(colors[counter % 360]);
+                   textBox.Foreground = new SolidColorBrush(colors[counter % 360]);
                     if (Pos.X < 68)
                         Pos.X++;
                     else Pos.X = -text.Width;
                     break;
                 case "ScrollY":
                     counter++;
-                   tb.Foreground = new SolidColorBrush(colors[counter % 360]);
+                   textBox.Foreground = new SolidColorBrush(colors[counter % 360]);
                     if (Pos.Y < 42)
                         Pos.Y++;
                     else Pos.Y= -text.Height;
                     break;
             }
 
-            rtb.Clear();
-            using( wb.GetBitmapContext())
+            renderTargetBitmap.Clear();
+            using( monitor.GetBitmapContext())
             {
 
                 //string time = DateTime.Now.Hour + " : " + DateTime.Now.Minute + " : " + DateTime.Now.Second;
                 
-                text = new FormattedText(tb.Text,
+                text = new FormattedText(textBox.Text,
                 new CultureInfo("de-de"),
                 FlowDirection.LeftToRight,
-                new Typeface(tb.FontFamily, FontStyles.Normal, tb.FontWeight, new FontStretch()),
-                tb.FontSize,
-                tb.Foreground);
-                text.LineHeight = tb.FontSize;  
-                drawingContext = dv.RenderOpen();
+                new Typeface(textBox.FontFamily, FontStyles.Normal, textBox.FontWeight, new FontStretch()),
+                textBox.FontSize,
+                textBox.Foreground);
+
+                text.LineHeight = textBox.FontSize;  
+                drawingContext = drawingVisual.RenderOpen();
                 drawingContext.DrawText(text, Pos);
                 drawingContext.Close();
       
-                rtb.Render(dv);
-                rtb.CopyPixels(new Int32Rect(0, 0, rtb.PixelWidth, rtb.PixelHeight), wb.BackBuffer, wb.BackBufferStride * wb.PixelHeight, wb.BackBufferStride);
+                renderTargetBitmap.Render(drawingVisual);
+                renderTargetBitmap.CopyPixels(new Int32Rect(0, 0, renderTargetBitmap.PixelWidth, renderTargetBitmap.PixelHeight),
+                                            monitor.BackBuffer, monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
                
             }
 

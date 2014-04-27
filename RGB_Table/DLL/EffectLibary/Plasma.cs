@@ -16,7 +16,7 @@ namespace RgbLibrary
    public class Plasma
     {
         
-        WriteableBitmap wbm;
+        WriteableBitmap monitor;
         Color[] colors;
         int[,] plasma;
 
@@ -36,8 +36,8 @@ namespace RgbLibrary
         {
             plasma = new int[wbm.PixelWidth, wbm.PixelHeight];
             colors = HSV.RedGreenBlue();
-            counter = 1;
-            this.wbm = wbm;
+            timer = 1;
+            this.monitor = wbm;
 
             for (int y = 0; y < wbm.PixelHeight; y++)
             {
@@ -54,7 +54,7 @@ namespace RgbLibrary
             }
             
         }
-        double counter;
+       int timer;
         private void InitColorPallette()
         {
             switch (palette)
@@ -79,18 +79,18 @@ namespace RgbLibrary
         }
         public void Plasma_execute()
         {
-            counter+=1;
-            if(counter % HSV.colorcount == 0)
-                counter/=HSV.colorcount;
+            timer+=1;
+            if(timer % HSV.colorcount == 0)
+                timer/=HSV.colorcount;
 
-            for (int y = 0; y < wbm.PixelHeight; y++)
+            for (int y = 0; y < monitor.PixelHeight; y++)
             {
-                for (int x = 0; x < wbm.PixelWidth; x++)
+                for (int x = 0; x < monitor.PixelWidth; x++)
                 {
-                    wbm.SetPixel(x, y, colors[(plasma[x, y] + (int)counter)%(HSV.colorcount)]);
+                    monitor.SetPixel(x, y, colors[(plasma[x, y] + timer)%(HSV.colorcount)]);
                 }
             }
-            //wbm = wbm.Flip(WriteableBitmapExtensions.FlipMode.Horizontal);
+          
         }      
     }
 }
