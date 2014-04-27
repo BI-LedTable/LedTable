@@ -69,7 +69,7 @@ namespace RgbLibrary
 
                    for (int i = 0; i < photo_data.ev_buffer.Length; i++)
                    {
-                       if (index < 68 * 42 * 3)
+                       if (index < 68 * 42 * 4)
                        {
                            bitmap_buffer[index] = photo_buffer[i];
                            index++;
@@ -79,7 +79,8 @@ namespace RgbLibrary
                            try
                            {
                                WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
-                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
+                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>  wh = bmp_foto));
+                               break;
                            }
                            catch (System.Exception e)
                            {
