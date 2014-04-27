@@ -50,10 +50,56 @@ namespace RgbLibrary
           
 
            bluetooth.CommandControlChange += new Bluetooth.PropertyChangeHandler(Event_Paint_Handler);
+           
        }
 
-       int Draw_Mode = 0; //Zur entscheidung zwischen Paint & Fotobearbeitungsmodus
-       int i = 0;
+       int Draw_Mode = 1; //Zur entscheidung zwischen Paint & Fotobearbeitungsmodus
+       //int i = 0;
+
+       byte[] bitmap_buffer = new byte[68*42*3];
+       int index = 0;
+
+       private void Event_Photo_Data(object sender, PropertyChangeArgs photo_data)
+       {
+           if (photo_data.ev_buffer != null)
+           {
+               try
+               {
+                   byte[] photo_buffer = photo_data.ev_buffer;
+
+                   for (int i = 0; i < photo_data.ev_buffer.Length; i++)
+                   {
+                       if (index < 68 * 42 * 3)
+                       {
+                           bitmap_buffer[index] = photo_buffer[i];
+                           index++;
+                       }
+                       else
+                       {
+                           try
+                           {
+                               WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
+                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
+                           }
+                           catch (System.Exception e)
+                           {
+
+                           }
+                          
+                       }
+                   }
+               }
+               catch (Exception exc)
+               {
+
+               }
+
+
+
+               
+           }
+       }
+
 
        private void Event_Paint_Handler(object sender, PropertyChangeArgs args)
        {
@@ -68,25 +114,42 @@ namespace RgbLibrary
                {
                    data_Stream = "";
                    bluetooth.CommandControlChange -= new Bluetooth.PropertyChangeHandler(Event_Paint_Handler);
+                   bluetooth.PhotoDataChange -= new Bluetooth.PropertyChangeHandler(Event_Photo_Data);
                    return;
                }
 
                if (data == "Paint")
                {
-                   Draw_Mode = 1;
+                   bluetooth.PhotoDataChange -= new Bluetooth.PropertyChangeHandler(Event_Photo_Data);
+                   Draw_Mode = 1; //wird nur beim wechseln aufgerufen?
                    data_Stream = "";
                }
                if (data == "Fotobearbeitung")
                {
+                   bluetooth.PhotoDataChange += new Bluetooth.PropertyChangeHandler(Event_Photo_Data);
+                   //bluetooth.CommandControlChange -= new Bluetooth.PropertyChangeHandler(Event_Paint_Handler);
                    Draw_Mode = 2;
                    data_Stream = "";
                    data = "";
                }
 
-               if (data == "Fertig")  //Das Übertragen der Fotodaten wurde abgeschlossen
-               {
+               //if (data == "Fertig")  //Das Übertragen der Fotodaten wurde abgeschlossen
+               //{
 
-                   i = 0;
+               //    try
+               //    {
+               //        WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
+
+
+               //        Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
+               //    }
+               //    catch (Exception exc)
+               //    {
+
+               //    }
+               //}
+
+                   //i = 0;
                    //neue Bitmap anlegen!!
                   
 
@@ -108,19 +171,19 @@ namespace RgbLibrary
 
                    //buffer = Encoding.ASCII.GetBytes(data_Stream);
 
-                   try
-                   {
-                   WriteableBitmap bmp_foto = BitmapFactory.New(0, 0).FromByteArray(buffer);
+                   //try
+                   //{
+                   //WriteableBitmap bmp_foto = BitmapFactory.New(0, 0).FromByteArray(buffer);
                    
                   
 
-                   Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
-                   }
-                   catch(Exception exc)
-                   {
+                   //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
+                   //}
+                   //catch(Exception exc)
+                   //{
                        
-                   }
-               }
+                   //}
+               //}
                
                //Paint
                if(Draw_Mode == 1)
@@ -174,15 +237,15 @@ namespace RgbLibrary
                }
 
 
-               //Fotobearbeitung
-               if (Draw_Mode == 2)
-               {
+               ////Fotobearbeitung
+               //if (Draw_Mode == 2)
+               //{
                    //Versuchsewise unperfomante Variante - eventuell zur performanteren Variante mit Stringbuilder wechseln!!
                    //Verzögerungen können jedoch nur schwer festgestellt werden.
                    //data_Stream = data_Stream + data;
-                   buffer[i] = Convert.ToByte(data);  //Neuer Ansatz - ARGB werden getrennt vom ANdroid Device gesendet
-                   i++;
-               }
+                   //buffer[i] = Convert.ToByte(data);  //Neuer Ansatz - ARGB werden getrennt vom ANdroid Device gesendet
+                  // i++;
+               //}
 
            }
            catch (Exception exc)

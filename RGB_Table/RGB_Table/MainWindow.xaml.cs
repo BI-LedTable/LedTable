@@ -341,12 +341,12 @@ namespace Aurora
 
                                 SetUserControls();
              
-                                object GlassOfSugar = new  Object();
-                                Slider slider = new Slider();
-                                Binding AmountBinding = new Binding("Amount");
-                                AmountBinding.Source = GlassOfSugar;
-                                AmountBinding.Mode = BindingMode.TwoWay;
-                                slider.SetBinding(Slider.ValueProperty, AmountBinding);
+                                //object GlassOfSugar = new  Object();
+                                //Slider slider = new Slider();
+                                //Binding AmountBinding = new Binding("Amount");
+                                ////AmountBinding.Source = GlassOfSugar;
+                                ////AmountBinding.Mode = BindingMode.TwoWay;
+                                //slider.SetBinding(Slider.ValueProperty, AmountBinding);
 
 
                             });
@@ -394,12 +394,12 @@ namespace Aurora
 
                                 SetUserControls();
 
-                                object GlassOfSugar = new Object();
-                                Slider slider = new Slider();
-                                Binding AmountBinding = new Binding("Amount");
-                                AmountBinding.Source = GlassOfSugar;
-                                AmountBinding.Mode = BindingMode.TwoWay;
-                                slider.SetBinding(Slider.ValueProperty, AmountBinding);
+                                //object GlassOfSugar = new Object();
+                                //Slider slider = new Slider();
+                                //Binding AmountBinding = new Binding("Amount");
+                                //AmountBinding.Source = GlassOfSugar;
+                                //AmountBinding.Mode = BindingMode.TwoWay;
+                                //slider.SetBinding(Slider.ValueProperty, AmountBinding);
 
 
                             });

@@ -43,6 +43,12 @@ namespace RgbLibrary
         {
             this.is_connected = is_connected;
         }
+
+        public byte[] ev_buffer { get; set; }
+        public PropertyChangeArgs(byte[] ev_buffer)
+        {
+            this.ev_buffer = ev_buffer;
+        }
     }
 
 
@@ -130,8 +136,14 @@ namespace RgbLibrary
             {
                 CommandControlChange(this, cc);
             }
-            else
+        }
+
+        public event PropertyChangeHandler PhotoDataChange;
+        protected void OnPhotoDataChange(object sender, PropertyChangeArgs ph_dat)
+        {
+            if (PhotoDataChange != null)
             {
+                PhotoDataChange(this, ph_dat);
             }
         }
 
@@ -216,6 +228,21 @@ namespace RgbLibrary
             {
                 control_command = value;
                 OnCommandControlChange(this, new PropertyChangeArgs(control_command));
+            }
+        }
+
+        private byte[] photo_buffer;
+
+        public byte[] Photo_buffer
+        {
+            get
+            {
+                return photo_buffer;
+            }
+            set
+            {
+                photo_buffer = value;
+                OnPhotoDataChange(this, new PropertyChangeArgs(photo_buffer));
             }
         }
 
@@ -401,7 +428,7 @@ namespace RgbLibrary
                 exception_connect = "" + exc;
                 Connected = false;
 
-                if (exc.HResult == -2147467259)
+                if (exc.HResult == -2147467259) //Definierter Fehlercode für diese Fehlermeldung  - Verbindung konnte nicht zustande kommen
                 {
                     Debug.WriteLine("Verbindung wurde vom Remotehost beendet!");
                 }
@@ -496,8 +523,27 @@ namespace RgbLibrary
                     {
                         try
                         {
-                            stream.Read(received_bytes, 0, received_bytes.Length);
-                            stream.Flush();
+                            
+                            int length = stream.Read(received_bytes, 0, received_bytes.Length);
+                            stream.Flush();// Bedenken von F. Wenigwieser bzgl. der Flush Funktion und dem Leeren von Daten
+                            
+                            //if (length > 15)
+                            //{
+                            //}
+                            Photo_buffer = new byte[length];
+                            
+                            try
+                            {
+                                for (int u = 0; u < length; u++)
+                                {
+                                    Photo_buffer[u] = received_bytes[u];
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                            
                         }
                         catch (Exception e)
                         {
@@ -515,7 +561,7 @@ namespace RgbLibrary
                     try
                     {
                         data_interpret(temp_rec);
-
+                       
                     }
                     catch (Exception interpret_exception)
                     {
