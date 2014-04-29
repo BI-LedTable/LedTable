@@ -112,7 +112,7 @@ namespace RgbLibrary
     public class ExpandingObjects
     {
         private WriteableBitmap writeableBmp;
-        private ExpandingObject[] Ellipsen;
+        private ExpandingObject[] expandingObject;
         private int amount;
         Random r;
         private Color c;
@@ -138,13 +138,13 @@ namespace RgbLibrary
                 c = value;
                 for (int i = 0; i < amount; i++)
                 {
-                    Ellipsen[i].Color = value;
+                    expandingObject[i].Color = value;
                 }
             
             }
             get 
             {
-                    return Ellipsen[0].Color;
+                    return expandingObject[0].Color;
             }
         }
         private double dhelp;
@@ -166,11 +166,11 @@ namespace RgbLibrary
         }
         private void generate_ellips() 
         {
-            Ellipsen = new ExpandingObject[amount];
+            expandingObject = new ExpandingObject[amount];
             for (int i = 0; i < amount; i++)
             {
-                Ellipsen[i] = new ExpandingObject(r);
-                Ellipsen[i].Color = c;
+                expandingObject[i] = new ExpandingObject(r);
+                expandingObject[i].Color = c;
             }
         }
         private void init() 
@@ -178,11 +178,11 @@ namespace RgbLibrary
             selected_obj = "ellipse";
             amount = 5;
           
-            Ellipsen = new ExpandingObject[amount];
+            expandingObject = new ExpandingObject[amount];
             r = new Random();
             for (int i = 0; i < amount; i++)
             {
-                Ellipsen[i] = new ExpandingObject(r);
+                expandingObject[i] = new ExpandingObject(r);
             }
             c = new Color();
            
@@ -195,21 +195,25 @@ namespace RgbLibrary
             {
                 for (int i = 0; i < amount; i++)
                 {
-                    Ellipsen[i].expand();
+                    expandingObject[i].expand();
 
                     switch (selected_obj)
                     {
                         case"ellipse":
-                            writeableBmp.DrawEllipse(Ellipsen[i].xPos - Ellipsen[i].Radius / 2, Ellipsen[i].yPos - Ellipsen[i].Radius / 2, Ellipsen[i].xPos + Ellipsen[i].Radius / 2, Ellipsen[i].yPos + Ellipsen[i].Radius / 2, Ellipsen[i].Color);
+                            writeableBmp.DrawEllipse(expandingObject[i].xPos - expandingObject[i].Radius / 2, expandingObject[i].yPos - expandingObject[i].Radius / 2, 
+                                                    expandingObject[i].xPos + expandingObject[i].Radius / 2, expandingObject[i].yPos + expandingObject[i].Radius / 2, expandingObject[i].Color);
                             break;
                         case "filled ellipse":
-                            writeableBmp.FillEllipse(Ellipsen[i].xPos - Ellipsen[i].Radius / 2, Ellipsen[i].yPos - Ellipsen[i].Radius / 2, Ellipsen[i].xPos + Ellipsen[i].Radius / 2, Ellipsen[i].yPos + Ellipsen[i].Radius / 2, Ellipsen[i].Color);
+                            writeableBmp.FillEllipse(expandingObject[i].xPos - expandingObject[i].Radius / 2, expandingObject[i].yPos - expandingObject[i].Radius / 2, 
+                                                    expandingObject[i].xPos + expandingObject[i].Radius / 2, expandingObject[i].yPos + expandingObject[i].Radius / 2, expandingObject[i].Color);
                             break;
                         case "rectangle":
-                            writeableBmp.DrawRectangle(Ellipsen[i].xPos - Ellipsen[i].Radius / 2, Ellipsen[i].yPos - Ellipsen[i].Radius / 2, Ellipsen[i].xPos + Ellipsen[i].Radius / 2, Ellipsen[i].yPos + Ellipsen[i].Radius / 2, Ellipsen[i].Color);
+                            writeableBmp.DrawRectangle(expandingObject[i].xPos - expandingObject[i].Radius / 2, expandingObject[i].yPos - expandingObject[i].Radius / 2, 
+                                                    expandingObject[i].xPos + expandingObject[i].Radius / 2, expandingObject[i].yPos + expandingObject[i].Radius / 2, expandingObject[i].Color);
                             break;
                         case "filled rectangle":
-                            writeableBmp.FillRectangle(Ellipsen[i].xPos - Ellipsen[i].Radius / 2, Ellipsen[i].yPos - Ellipsen[i].Radius / 2, Ellipsen[i].xPos + Ellipsen[i].Radius / 2, Ellipsen[i].yPos + Ellipsen[i].Radius / 2, Ellipsen[i].Color);
+                            writeableBmp.FillRectangle(expandingObject[i].xPos - expandingObject[i].Radius / 2, expandingObject[i].yPos - expandingObject[i].Radius / 2, 
+                                                        expandingObject[i].xPos + expandingObject[i].Radius / 2, expandingObject[i].yPos + expandingObject[i].Radius / 2, expandingObject[i].Color);
                             break;
                     }
                  
