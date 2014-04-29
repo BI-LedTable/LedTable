@@ -47,16 +47,15 @@ namespace RgbLibrary
         {
             if (Path != null)
                 origin = LoadBitmap(Path);
-            c = new Color[42 * 68];
-            int count = 0;
-
+          
             try
             {
                 if (origin != null)
                 {
 
                     origin = origin.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
-                    origin.CopyPixels(new Int32Rect(0,0,origin.PixelWidth,origin.PixelHeight), monitor.BackBuffer, monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
+                    origin.CopyPixels(new Int32Rect(0,0,origin.PixelWidth,origin.PixelHeight), monitor.BackBuffer, 
+                                    monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
                 }
             }
             catch (AccessViolationException e)
