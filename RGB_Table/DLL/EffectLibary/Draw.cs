@@ -78,8 +78,8 @@ namespace RgbLibrary
                        {
                            try
                            {
-                               WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
-                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
+                               //WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
+                              // Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh = bmp_foto));
                            }
                            catch (System.Exception e)
                            {
@@ -103,6 +103,8 @@ namespace RgbLibrary
 
        private void Event_Paint_Handler(object sender, PropertyChangeArgs args)
        {
+
+       
            try
            {
                
@@ -185,8 +187,14 @@ namespace RgbLibrary
                    //}
                //}
                
+
+               //***********************************************************************************************************************************************************************
+               //#######################################################################################################################################################################
+
+               //Auskommentiert zu testzwecken
+
                //Paint
-               if(Draw_Mode == 1)
+               if (Draw_Mode == 1)
                {
 
                    //Überprüfung, ob das Argument eine Zahl ist - > eventuell sollte man dies durch eine Modus Abfrage MainWindow seitig ersetzen
@@ -213,7 +221,7 @@ namespace RgbLibrary
                            mousepos.Y = draw_pos_y;
                        }
 
-                       
+
 
                        if ((draw_col_r < 256) && (draw_col_g < 256) && (draw_col_b < 256))
                        {
@@ -233,7 +241,7 @@ namespace RgbLibrary
                            }
                        }
                    }
-                   
+
                }
 
 
