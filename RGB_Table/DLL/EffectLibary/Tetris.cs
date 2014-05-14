@@ -572,13 +572,15 @@ namespace RgbLibrary
             String control = args.mesg;
             if (args.mesg.Length > 13)
             {
+                return;
             }
+            //Es könnten noch Probleme auftreten wegen "Taste gedrückt halten" - mit Kitzmüller besprechen
 
             try
             {
                 switch (control)
                 {
-                    //Es könnten noch Probleme auftreten wegen "Taste gedrückt halten" - mit Kitzmüller besprechen
+                    
                     case "down_click":
                         {
                             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,new Action(() =>

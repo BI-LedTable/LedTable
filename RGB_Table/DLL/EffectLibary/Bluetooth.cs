@@ -400,7 +400,8 @@ namespace RgbLibrary
             add = get_device_address(dev_name);
 
             BluetoothEndPoint BEP = new BluetoothEndPoint(add, BluetoothUUID);
-            client = new BluetoothClient(); //Versuchsweise eingefügt
+
+            client = new BluetoothClient();
 
             object connection = false;
             try
@@ -411,7 +412,6 @@ namespace RgbLibrary
             {
                 Debug.WriteLine(excep.ToString());
             }
-
 
         }
 
@@ -428,8 +428,8 @@ namespace RgbLibrary
                 exception_connect = "" + exc;
                 Connected = false;
 
-                if (exc.HResult == -2147467259) //Definierter Fehlercode für diese Fehlermeldung  - Verbindung konnte nicht zustande kommen
-                {
+                if (exc.HResult == -2147467259) //Definierter Fehlercode für diese Fehlermeldung  
+                {                               //Die Verbindung konnte nicht erfolgen                               
                     Debug.WriteLine("Verbindung wurde vom Remotehost beendet!");
                 }
                 return;
@@ -512,7 +512,7 @@ namespace RgbLibrary
         private void read_data()
         {
 
-            byte[] received_bytes = new byte[68 * 42 * 3];
+            byte[] received_bytes = new byte[68 * 42 * 4];
             while (stream != null)  //Sollte der Stream abbrechen (Die Verbindung abbrechen), so soll das Lesen beendet werden
             {
                 try
@@ -525,7 +525,7 @@ namespace RgbLibrary
                         {
                             
                             int length = stream.Read(received_bytes, 0, received_bytes.Length);
-                            stream.Flush();// Bedenken von F. Wenigwieser bzgl. der Flush Funktion und dem Leeren von Daten
+                            //stream.Flush();// Bedenken von F. Wenigwieser bzgl. der Flush Funktion und dem Leeren von Daten
                             
                             //if (length > 15)
                             //{
