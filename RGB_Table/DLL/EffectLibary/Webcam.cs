@@ -21,13 +21,13 @@ namespace RgbLibrary
        
        
         VideoCaptureDevice videoSource;
-        WriteableBitmap wbtarget;
-        WriteableBitmap wbsource;
+        WriteableBitmap monitor;
+        WriteableBitmap origin;
         System.Drawing.Bitmap bitmap;
         public Webcam(WriteableBitmap wb)
         {
       
-            this.wbtarget = wb;
+            this.monitor = wb;
             runWebcam();
         }
         MemoryStream memory;
@@ -51,19 +51,11 @@ namespace RgbLibrary
 
                 Color c = new Color();
               
-                wbsource = BitmapFactory.ConvertToPbgra32Format(bitmapImage);
-                int scalex = (int)(wbsource.DpiX * wbsource.Width / (wbtarget.Width * wbtarget.DpiX));
-                int scaley = (int)(wbsource.DpiY * wbsource.Height / (wbtarget.Height * wbtarget.DpiY));
-                for (int i = 0; i < 42; i++)
-                {
-                    for (int j = 0; j < 68; j++)
-                    {
-                        c = wbsource.GetPixel((int)(j * scalex), (int)(i * scaley));
-                        wbtarget.SetPixel(j, i, c);
-                        
+                origin = BitmapFactory.ConvertToPbgra32Format(bitmapImage);
+                origin = origin.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
+                origin.CopyPixels(new Int32Rect(0, 0, origin.PixelWidth, origin.PixelHeight), monitor.BackBuffer,
+                                   monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
 
-                    }
-                }
              
             }
 
@@ -74,7 +66,7 @@ namespace RgbLibrary
         public void resumeWebcam(WriteableBitmap wb) 
         {
             videoSource.Start();
-            this.wbtarget = wb;
+            this.monitor = wb;
         }
         public void runWebcam() 
         {

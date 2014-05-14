@@ -15,8 +15,8 @@ namespace RgbLibrary
     public class ImagePixelate
     {
 
-        private WriteableBitmap wbsource;
-        private WriteableBitmap wbtarget;
+        private WriteableBitmap origin;
+        private WriteableBitmap monitor;
 
         public String Path { get; set; }
         public void path()
@@ -39,72 +39,23 @@ namespace RgbLibrary
         public ImagePixelate(WriteableBitmap wbtarget)
         {
 
-            this.wbtarget = wbtarget;
+            this.monitor = wbtarget;
             execute();
 
         }
         public void execute()
         {
             if (Path != null)
-                wbsource = LoadBitmap(Path);
-            c = new Color[42 * 68];
-            int count = 0;
-
-
+                origin = LoadBitmap(Path);
+          
             try
             {
-                if (wbsource != null)
+                if (origin != null)
                 {
-                    //// http://wiki.delphigl.com/index.php/Convolution-Filter
-                    //// http://writeablebitmapex.codeplex.com/SourceControl/latest#branches/WBX_1.0_WinMD/Source/WriteableBitmapEx/WriteableBitmapFilterExtensions.cs
 
-                    //int[,] KernelGaussianBlur5x5 = {
-                    //                            {1,  4,  7,  4, 1},
-                    //                            {4, 16, 26, 16, 4},
-                    //                            {7, 26, 41, 26, 7},
-                    //                            {4, 16, 26, 16, 4},
-                    //                            {1,  4,  7,  4, 1}
-                    //                        };
-
-                    //int[,] KernelGaussianBlur3x3 = {
-                    //                                   {16, 26, 16},
-                    //                                   {26, 41, 26},
-                    //                                   {16, 26, 16}
-                    //                                };
-
-
-                    //int[,] KernelSharp = {
-                    //                {-1, -2, -1},
-                    //                {0, 1, 0},
-                    //                {1, 2, 1}
-                    //            };
-
-                    wbsource = wbsource.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
-
-                    //int scalex = (int)(wbsource.PixelWidth / (wbtarget.PixelWidth));
-                    //int scaley = (int)(wbsource.PixelHeight / (wbtarget.PixelHeight));
-
-                    //if (scalex <= 0)// für bilder die kleiner als 68x42 sind (werden dann öfter angezeigt)
-                    //{
-                    //    scalex = 1;
-                    //}
-
-                    //if (scaley <= 0)
-                    //{
-                    //    scaley = 1;
-                    //}
-
-                    for (int i = 0; i < 42; i++)
-                    {
-                        for (int j = 0; j < 68; j++)
-                        {
-                            // c[count] = wbsource.GetPixel((int)(j * scalex), (int)(i * scaley));
-                            c[count] = wbsource.GetPixel((int)(j), (int)(i));
-                            wbtarget.SetPixel(j, i, c[count]);
-                            count++;
-                        }
-                    }
-
+                    origin = origin.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
+                    origin.CopyPixels(new Int32Rect(0,0,origin.PixelWidth,origin.PixelHeight), monitor.BackBuffer, 
+                                    monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
                 }
             }
             catch (AccessViolationException e)
