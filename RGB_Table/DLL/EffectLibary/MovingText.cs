@@ -101,7 +101,7 @@ namespace RgbLibrary
             textBox.Foreground = Brushes.White;
          
             renderTargetBitmap = new RenderTargetBitmap(monitor.PixelWidth, monitor.PixelHeight, monitor.DpiX, monitor.DpiY, PixelFormats.Default);
-            Pos = new Point(0,0);
+            Pos = new Point(10,10);
             drawingVisual = new DrawingVisual();
 
            
@@ -113,14 +113,24 @@ namespace RgbLibrary
             
             switch (mode)
             {
-                case "ScrollX":
+                case "Links nach Rechts":
                     counter++;
                    textBox.Foreground = new SolidColorBrush(colors[counter % 360]);
-                    if (Pos.X < 68)
-                        Pos.X++;
-                    else Pos.X = -text.Width;
+                    if (Pos.X > -text.Width)
+                        Pos.X--;
+                    else Pos.X = 68;
                     break;
-                case "ScrollY":
+                case "Rechts nach Links":
+                    {
+                        counter++;
+                        textBox.Foreground = new SolidColorBrush(colors[counter % 360]);
+                        if (Pos.X < 68)
+                            Pos.X++;
+                        else Pos.X = -text.Width;
+                        break;
+                    }
+            
+                case "Oben/Unten":
                     counter++;
                    textBox.Foreground = new SolidColorBrush(colors[counter % 360]);
                     if (Pos.Y < 42)
