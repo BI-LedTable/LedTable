@@ -490,24 +490,20 @@ namespace Aurora
                 }
 
         }
-       
+        bool init = false;
         private void Init_Connect_Window()
         {
 
             portWindow.Owner = this.AuroraWindow;
 
-            if (portWindow.IsActive == false)
-            {
+         
                 //pw.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
                 portWindow.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
                 portWindow.ShowDialog();
 
-            }
-            else if (!portWindow.IsVisible)
-            {
-                portWindow.Visibility = Visibility.Visible;
-
-            }
+       
+            init = true;
+          
         }
 
         /// <summary>
@@ -538,7 +534,13 @@ namespace Aurora
             switch (feSource.Name)
             {
                 case "Connect":
-                    Init_Connect_Window();
+                    if(!init)
+                        Init_Connect_Window();
+                    else   
+                    {
+                         portWindow.Visibility = Visibility.Visible;
+
+                     }
                     break;
                 case "Bluetooth":
                     BluetoothWindow b_w = new BluetoothWindow(this);
