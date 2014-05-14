@@ -27,8 +27,8 @@ namespace RgbLibrary
    public class Draw
     {
 
-       WriteableBitmap wh;
-       WriteableBitmap wbm;
+       WriteableBitmap drawlayer;
+       WriteableBitmap monitor;
        Image img;
        Point mousepos;
        Point origin;
@@ -38,11 +38,11 @@ namespace RgbLibrary
 
        String data_Stream;
 
-       public Draw(WriteableBitmap wh, Image img, WriteableBitmap wbm) 
+       public Draw(WriteableBitmap wh, Image img, WriteableBitmap monitor) 
        {
-           this.wbm = wbm;
+           this.monitor = monitor;
            this.img = img;
-           this.wh = wh;
+           this.drawlayer = wh;
            mousepos = new Point();
            origin = new Point();
            c = new Color();
@@ -79,7 +79,11 @@ namespace RgbLibrary
                            try
                            {
                                WriteableBitmap bmp_foto = BitmapFactory.New(68, 42).FromByteArray(bitmap_buffer);
-                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>  wh = bmp_foto));
+                            
+                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => {
+                                   drawlayer = bmp_foto;
+                                   monitor.Blit(new Rect(new Size(68, 42)), drawlayer, new Rect(new Size(68, 42)));
+                              }));
                                break;
                            }
                            catch (System.Exception e)
@@ -226,7 +230,11 @@ namespace RgbLibrary
                                Color draw_col = Color.FromRgb(r, g, b);
 
 
-                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => wh.SetPixel((int)mousepos.X, (int)mousepos.Y, draw_col)));
+                               Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() => { 
+                                   drawlayer.SetPixel((int)mousepos.X, (int)mousepos.Y, draw_col);
+                                   monitor.Blit(new Rect(new Size(68, 42)), drawlayer, new Rect(new Size(68, 42)));
+                                   drawlayer.Blit(new Rect(new Size(68, 42)), monitor, new Rect(new Size(68, 42)));
+                               }));
                            }
                            catch (Exception ex)
                            {
@@ -277,6 +285,7 @@ namespace RgbLibrary
        }
        public void Draw_execute()
        {
+          
        }
        public Drawtype setDrawtype
        {
@@ -288,23 +297,23 @@ namespace RgbLibrary
                switch (dt) 
                {
                    case Drawtype.point:
-                       this.wh.SetPixel((int)mousepos.X, (int)mousepos.Y, c);
+                       this.drawlayer.SetPixel((int)mousepos.X, (int)mousepos.Y, c);
                        break;
                    case Drawtype.line:
-                       wh.DrawLine((int)origin.X,(int)origin.Y,(int)mousepos.X,(int)mousepos.Y,c);
+                       drawlayer.DrawLine((int)origin.X,(int)origin.Y,(int)mousepos.X,(int)mousepos.Y,c);
                        break;
                    case Drawtype.circle:
-                       wh.DrawEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
+                       drawlayer.DrawEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
                        break;
                    case Drawtype.rectangle:
-                       wh.DrawRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
+                       drawlayer.DrawRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
                        break;
                    case Drawtype.fillrectangle:
                        
-                       wh.FillRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
+                       drawlayer.FillRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
                        break;
                    case Drawtype.fillcircle:
-                       wh.FillEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
+                       drawlayer.FillEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, c);
                        break;
                    
                
@@ -317,19 +326,19 @@ namespace RgbLibrary
                {
               
                    case Drawtype.line:
-                       wh.DrawLine((int)origin.X,(int)origin.Y,(int)mousepos.X,(int)mousepos.Y,Colors.Transparent);
+                       drawlayer.DrawLine((int)origin.X,(int)origin.Y,(int)mousepos.X,(int)mousepos.Y,Colors.Transparent);
                        break;
                    case Drawtype.circle:
-                       wh.DrawEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
+                       drawlayer.DrawEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
                        break;
                    case Drawtype.rectangle:
-                       wh.DrawRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
+                       drawlayer.DrawRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
                        break;
                    case Drawtype.fillrectangle:
-                       wh.FillRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
+                       drawlayer.FillRectangle((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
                        break;
                    case Drawtype.fillcircle:
-                       wh.FillEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
+                       drawlayer.FillEllipse((int)origin.X, (int)origin.Y, (int)mousepos.X, (int)mousepos.Y, Colors.Transparent);
                        break;
                }
        }
