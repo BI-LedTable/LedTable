@@ -24,21 +24,24 @@ namespace RgbLibrary
         WriteableBitmap monitor;
         WriteableBitmap origin;
         System.Drawing.Bitmap bitmap;
+        BitmapImage bitmapImage;
+         MemoryStream memory;
         public Webcam(WriteableBitmap wb)
         {
-      
+
+           
             this.monitor = wb;
             runWebcam();
         }
-        MemoryStream memory;
+       
         public void Webcam_execute() 
         {
-            BitmapImage bitmapImage;
-            if (bitmap != null)
+           
+           if (bitmap != null)
             {
                 using (memory = new MemoryStream())
                 {
-                    
+
                     bitmap.Save(memory, ImageFormat.Bmp);
                     memory.Position = 0;
                     bitmapImage = new BitmapImage();
@@ -49,15 +52,15 @@ namespace RgbLibrary
 
                 }
 
-                Color c = new Color();
-              
-                origin = BitmapFactory.ConvertToPbgra32Format(bitmapImage);
-                origin = origin.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
-                origin.CopyPixels(new Int32Rect(0, 0, origin.PixelWidth, origin.PixelHeight), monitor.BackBuffer,
-                                   monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
-
-             
             }
+
+           if (bitmapImage != null)
+           {
+               origin = BitmapFactory.ConvertToPbgra32Format(bitmapImage);
+               origin = origin.Resize(68, 42, WriteableBitmapExtensions.Interpolation.NearestNeighbor);
+               origin.CopyPixels(new Int32Rect(0, 0, origin.PixelWidth, origin.PixelHeight), monitor.BackBuffer,
+                                  monitor.BackBufferStride * monitor.PixelHeight, monitor.BackBufferStride);
+           }
 
             
            
